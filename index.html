@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FastCount - Closed by MinLikeFYSC</title>
+  <title>FastCount - Closed</title>
   <style>
     * {
       margin: 0; padding: 0; box-sizing: border-box;
@@ -14,42 +14,51 @@
       justify-content: center;
       align-items: center;
       background: #121212;
-      color: #eee;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #ddd;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       text-align: center;
       padding: 20px;
+      user-select: none;
     }
     .container {
-      max-width: 480px;
+      max-width: 460px;
     }
     h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+      font-size: 2.8rem;
       font-weight: 700;
-      color: #ff4500; /* bright orange-red for a bit of mischief */
+      margin-bottom: 1rem;
+      color: #ff5500;
+      user-select: text;
     }
     p {
       font-size: 1.2rem;
-      line-height: 1.6;
-      color: #ccc;
+      line-height: 1.5;
       margin-bottom: 1rem;
+      user-select: text;
     }
-    .footer {
+    .emoji {
+      display: inline-block;
+      animation: float 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(20deg); }
+    }
+    .signature {
       margin-top: 2rem;
       font-size: 0.9rem;
-      color: #555;
-      font-style: italic;
+      color: #777;
+      user-select: text;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>FastCount is Closed!</h1>
-    <p>MinLikeFYSC has taken over and decided to shut down the site... just to annoy you.</p>
-    <p>No more counters, no more stats — just pure, unfiltered frustration.</p>
-    <p>Stay tuned (or not). Maybe it’ll reopen. Or maybe not.</p>
-    <p>Thanks for being part of the madness!</p>
-    <div class="footer">&copy; 2025 MinLikeFYSC. All rights reserved.</div>
+    <h1>FastCount is closed <span class="emoji">😈</span></h1>
+    <p>MinLikeFYSC took over and decided to pull the plug.</p>
+    <p>He hates GraphStats <span class="emoji">😈</span> and won’t think twice.</p>
+    <p>No reopen plans. No excuses.</p>
+    <div class="signature">&copy; 2025 MinLikeFYSC <span class="emoji">😈</span></div>
   </div>
 </body>
 </html>
