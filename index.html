@@ -531,11 +531,13 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
             backgroundColor: 'rgba(0, 255, 240, 0.1)',
             borderWidth: 3,
             tension: 0.1,
+            pointRadius: 0,
             fill: true
           }]
         },
         options: {
           responsive: true,
+          annimation: false,
           plugins: {
             legend: {
               display: true,
@@ -560,28 +562,35 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
           },
           scales: {
             x: {
+              display: false,
               grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              },
-              ticks: {
-                color: '#ffffff'
+                display: false
               }
             },
             y: {
+              display: false,
               grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
+                color: 'rgba(255, 255, 255, 0.1)',
+                drawBorder: false
               },
               ticks: {
-                color: '#ffffff',
+                color: 'rgba(255, 255, 255, 0.6)',
                 callback: function(value) {
-                  return value.toLocaleString();
+                  if (value >= 1000000) {
+                    return (value / 1000000).toFixed(1) + 'M';
+                  }
+                  if (value >= 1000) {
+                    return (value / 1000).toFixed(1) + 'K';
+                  }
+                  return value;
                 }
               }
             }
           },
           interaction: {
-            intersect: false,
-            mode: 'nearest'
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false
           }
         }
       });
