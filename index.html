@@ -548,7 +548,7 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
               intersect: false,
               callbacks: {
                 label: function(context) {
-                  return `Followers: ${context.parsed.y.toLocaleString()}`;
+                  return `${context.parsed.y.toLocaleString()}`;
                 }
               }
             }
