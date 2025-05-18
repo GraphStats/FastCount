@@ -536,26 +536,19 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
           }]
         },
         options: {
+          animation: false,
           responsive: true,
-          annimation: false,
+          maintainAspectRatio: false,
           plugins: {
             legend: {
-              display: true,
-              position: 'top',
-              labels: {
-                color: '#ffffff',
-                font: {
-                  family: 'Roboto',
-                  size: 14
-                }
-              }
+              display: false
             },
             tooltip: {
               mode: 'index',
               intersect: false,
               callbacks: {
                 label: function(context) {
-                  return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}`;
+                  return `Followers: ${context.parsed.y.toLocaleString()}`;
                 }
               }
             }
