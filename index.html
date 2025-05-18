@@ -13,6 +13,7 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7562628849511682"
      crossorigin="anonymous"></script>
   <meta name="google-adsense-account" content="ca-pub-7562628849511682">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -269,7 +270,6 @@
   animation: slideIn 0.3s ease-out forwards;
 }
 
-/* À mettre dans une balise <style> dans ton <head> */
 #main-content {
   opacity: 0;
   transform: translateY(20px);
@@ -291,6 +291,25 @@
 
 .share-option:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+/* Chart container styles */
+#chart-container {
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+  display: none;
+}
+
+#subscriberChart {
+  width: 100% !important;
+  height: 400px !important;
+}
+
+/* Toggle chart button */
+#toggle-chart-button {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #00fff0, #008080);
 }
 </style>
 <body>
@@ -324,7 +343,13 @@
     <img id="channel-avatar" src="" alt="Channel Avatar">
     <div id="channel-name"></div>
     <div id="subscriber-count" class="odometer">0</div>
+    <button id="toggle-chart-button" onclick="toggleChart()">Show Subscriber History</button>
   </div>
+  
+  <div class="glass-card" id="chart-container">
+    <canvas id="subscriberChart"></canvas>
+  </div>
+  
 <div id="footer">
   V6.3.6 (Security Version) | Powered by GraphStats.
 </div>
@@ -383,6 +408,10 @@
     let channelId;
     let intervalId;
     let odometer;
+    let subscriberChart;
+    let historicalData = [];
+    const MAX_DATA_POINTS = 30; // Keep last 30 data points
+    
 (adsbygoogle = window.adsbygoogle || []).push({});
     window.addEventListener('load', () => {
       const urlFragment = window.location.hash.slice(1);
@@ -488,38 +517,154 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
       });
     }
 
-    async function fetchStatsData() {
-  try {
-    const response = await fetch(`https://backend.mixerno.space/api/youtube/estv3/${channelId}`);
-    if (response.ok) {
-      const data = await response.json();
-      if (data && data.items && data.items.length > 0) {
-        const channel = data.items[0];
-        // Update channel info
-        document.getElementById("channel-avatar").src = channel.snippet.thumbnails.default.url;
-        document.getElementById("channel-name").textContent = channel.snippet.title;
-        
-        // Update subscriber count
-        if (channel.statistics && typeof channel.statistics.subscriberCount === "number") {
-          if (!odometer) {
-            odometer = new Odometer({ 
-              el: document.getElementById("subscriber-count"), 
-              value: channel.statistics.subscriberCount 
-            });
-          } else {
-            odometer.update(channel.statistics.subscriberCount);
+    function initializeChart() {
+      const ctx = document.getElementById('subscriberChart').getContext('2d');
+      
+      subscriberChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Subscribers',
+            data: [],
+            borderColor: '#00fff0',
+            backgroundColor: 'rgba(0, 255, 240, 0.1)',
+            borderWidth: 3,
+            tension: 0.1,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: '#ffffff',
+                font: {
+                  family: 'Roboto',
+                  size: 14
+                }
+              }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  return `${context.dataset.label}: ${context.parsed.y.toLocaleString()}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#ffffff'
+              }
+            },
+            y: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#ffffff',
+                callback: function(value) {
+                  return value.toLocaleString();
+                }
+              }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'nearest'
           }
         }
-      }
-    } else {
-      console.error("Failed to fetch stats data: ", response.statusText);
+      });
     }
-  } catch (error) {
-    console.error("Error fetching stats data:", error);
-  }
-}
 
-    console.log(data)
+    function updateChart(count) {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString();
+      
+      // Add new data point
+      historicalData.push({
+        time: timeString,
+        count: count
+      });
+      
+      // Keep only the last MAX_DATA_POINTS
+      if (historicalData.length > MAX_DATA_POINTS) {
+        historicalData.shift();
+      }
+      
+      // Update chart data
+      if (!subscriberChart) {
+        initializeChart();
+      }
+      
+      subscriberChart.data.labels = historicalData.map(data => data.time);
+      subscriberChart.data.datasets[0].data = historicalData.map(data => data.count);
+      subscriberChart.update();
+    }
+
+    async function fetchStatsData() {
+      try {
+        const response = await fetch(`https://backend.mixerno.space/api/youtube/estv3/${channelId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.items && data.items.length > 0) {
+            const channel = data.items[0];
+            // Update channel info
+            document.getElementById("channel-avatar").src = channel.snippet.thumbnails.default.url;
+            document.getElementById("channel-name").textContent = channel.snippet.title;
+            
+            // Update subscriber count
+            if (channel.statistics && typeof channel.statistics.subscriberCount === "number") {
+              const subscriberCount = channel.statistics.subscriberCount;
+              if (!odometer) {
+                odometer = new Odometer({ 
+                  el: document.getElementById("subscriber-count"), 
+                  value: subscriberCount 
+                });
+              } else {
+                odometer.update(subscriberCount);
+              }
+              
+              // Update the chart with new data
+              updateChart(subscriberCount);
+            }
+          }
+        } else {
+          console.error("Failed to fetch stats data: ", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching stats data:", error);
+      }
+    }
+
+    function toggleChart() {
+      const chartContainer = document.getElementById('chart-container');
+      const toggleButton = document.getElementById('toggle-chart-button');
+      
+      if (chartContainer.style.display === 'none' || chartContainer.style.display === '') {
+        chartContainer.style.display = 'block';
+        toggleButton.textContent = 'Hide Subscriber History';
+        
+        // Initialize chart if not already done
+        if (!subscriberChart && historicalData.length > 0) {
+          initializeChart();
+          updateChart(historicalData[historicalData.length - 1].count);
+        }
+      } else {
+        chartContainer.style.display = 'none';
+        toggleButton.textContent = 'Show Subscriber History';
+      }
+    }
 
     function activateOnlyCount() {
       document.getElementById("search-bar-container").style.display = "none";
@@ -527,6 +672,8 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
       document.getElementById("channel-avatar").style.display = "none";
       document.getElementById("channel-name").style.display = "none";
       document.getElementById("share-button").style.display = "none";
+      document.getElementById("chart-container").style.display = "none";
+      document.getElementById("toggle-chart-button").style.display = "none";
 
       document.getElementById("subscriber-count").style.fontSize = "15em";
       document.getElementById("counter-container").style.alignItems = "flex-start";
@@ -576,42 +723,41 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
       
       if (!shareButton.contains(event.target) && !shareOptions.contains(event.target)) {
         shareOptions.style.display = "none";
-      
-    }
+      }
     })
 
     function toggleShareOptions() {
-  const shareOptions = document.getElementById('share-options');
-  
-  if (shareOptions.style.display === "none" || shareOptions.style.display === "") {
-    shareOptions.style.display = "block";
-  } else {
-    shareOptions.style.display = "none";
-  }
-}
+      const shareOptions = document.getElementById('share-options');
+      
+      if (shareOptions.style.display === "none" || shareOptions.style.display === "") {
+        shareOptions.style.display = "block";
+      } else {
+        shareOptions.style.display = "none";
+      }
+    }
 
-function setChannelTitle(channelName) {
-  const titleElement = document.getElementById("page-title");
-  if (channelName && channelName.trim() !== "") {
-    document.title = `${channelName} - FastCount`;
-  } else {
-    document.title = "FastCount";
-  }
-}
-document.title = "FastCount - " + channelTitle;
-function displayChannelInfo(channel) {
-  document.getElementById("channel-name").textContent = channel.snippet.title;
-  document.title = "FastCount - " + channel.snippet.title;
-}
+    function setChannelTitle(channelName) {
+      const titleElement = document.getElementById("page-title");
+      if (channelName && channelName.trim() !== "") {
+        document.title = `${channelName} - FastCount`;
+      } else {
+        document.title = "FastCount";
+      }
+    }
+    document.title = "FastCount - " + channelTitle;
+    function displayChannelInfo(channel) {
+      document.getElementById("channel-name").textContent = channel.snippet.title;
+      document.title = "FastCount - " + channel.snippet.title;
+    }
 
-document.title = `${data.author} - Live Sub Count`;
+    document.title = `${data.author} - Live Sub Count`;
 
-app.get ('/counter/:channelId', (req, res) => {
-  const channelId = req.params.channelId;
-  const channelName = req.query.channelName || 'YouTube Channel';
-  const channelTitle = req.query.channelTitle || 'FastCount';
-  res.render('counter', { channelId, channelName, channelTitle });
-});
-    </script>
-  </body>
+    app.get ('/counter/:channelId', (req, res) => {
+      const channelId = req.params.channelId;
+      const channelName = req.query.channelName || 'YouTube Channel';
+      const channelTitle = req.query.channelTitle || 'FastCount';
+      res.render('counter', { channelId, channelName, channelTitle });
+    });
+  </script>
+</body>
 </html>
