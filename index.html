@@ -411,9 +411,10 @@
     
 (adsbygoogle = window.adsbygoogle || []).push({});
     window.addEventListener('load', () => {
-      const urlFragment = window.location.hash.slice(1);
-      if (urlFragment) {
-        channelId = urlFragment;
+      // Vérifiez si l'URL correspond au format /counter/:channelId
+      const pathParts = window.location.pathname.split('/');
+      if (pathParts.length >= 3 && pathParts[1] === 'counter') {
+        channelId = pathParts[2];
         document.getElementById("counter-container").style.display = "flex";
         document.getElementById("share-button").style.display = "block";
         fetchStatsData();
@@ -421,9 +422,6 @@
         document.getElementById("only-count-button").style.display = "inline-block";
       }
     });
-
-if (window.location.pathname.startsWith("/counter/:ChannelID")) {
-}
 
     function handleKeyPress(event) {
       if (event.key === "Enter") {
@@ -492,7 +490,7 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
         channelElement.textContent = channel[0];
         channelElement.classList.add("channel-result");
         channelElement.onclick = () => {
-          const newUrl = `${window.location.origin}/#${channel[2]}`;
+          const newUrl = `${window.location.origin}/counter/${channel[2]}`;
           window.history.pushState({}, '', newUrl);
 
           channelId = channel[2];
@@ -698,13 +696,13 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
       const channelName = document.getElementById("channel-name").textContent || "YouTube channel";
       const count = document.getElementById("subscriber-count").textContent || "0";
       const text = `Check out ${channelName}'s subscriber count: ${count} on FastCount!`;
-      const url = window.location.href;
+      const url = `${window.location.origin}/counter/${channelId}`;
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
       document.getElementById("share-options").style.display = "none";
     }
     
     function copyLink() {
-      const url = window.location.href;
+      const url = `${window.location.origin}/counter/${channelId}`;
       navigator.clipboard.writeText(url).then(() => {
         alert("Link copied to clipboard!");
         document.getElementById("share-options").style.display = "none";
@@ -747,13 +745,6 @@ if (window.location.pathname.startsWith("/counter/:ChannelID")) {
     }
 
     document.title = `${data.author} - Live Sub Count`;
-
-    app.get ('/counter/:channelId', (req, res) => {
-      const channelId = req.params.channelId;
-      const channelName = req.query.channelName || 'YouTube Channel';
-      const channelTitle = req.query.channelTitle || 'FastCount';
-      res.render('counter', { channelId, channelName, channelTitle });
-    });
   </script>
 </body>
 </html>
