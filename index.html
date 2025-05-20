@@ -675,12 +675,21 @@
 
       document.getElementById("only-count-button").style.display = "none";
       
-      window.addEventListener('load', () => {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('only-count') === 'true') {
-          activateOnlyCount();
-        }
-      });
+window.addEventListener('load', () => {
+  // Vérifie si l'URL correspond au format /counter/:channelId
+  const pathParts = window.location.pathname.split('/');
+  if (pathParts.length >= 3 && pathParts[1] === 'counter') {
+    channelId = pathParts[2];
+    document.getElementById("counter-container").style.display = "flex";
+    document.getElementById("share-button").style.display = "block";
+    fetchStatsData();
+    intervalId = setInterval(fetchStatsData, 2000);
+    document.getElementById("only-count-button").style.display = "inline-block";
+    
+    // Ajoutez cette ligne pour mettre à jour le titre
+    document.title = "FastCount - Loading...";
+  }
+});
 
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set('only-count', 'true');
