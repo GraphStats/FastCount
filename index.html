@@ -10,12 +10,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.min.css" />
   <link rel="icon" type="image/png" href="https://cdn.glitch.global/3646dfb4-5cb1-4c3c-9337-1d56b96025d2/Design_sans_titre-removebg-preview%20(1).png?v=1746820022653">
   <meta name="trustpilot-one-time-domain-verification-id" content="3d078e23-117c-46ae-991c-63c340043c1f"/>
-  <script>
-  // Boucle de redirection infinie
-  setTimeout(function() {
-    window.location.href = window.location.href;
-  }, 1);
-</script>
   <meta name="description" content="FastCount Is THE BEST Counter">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7562628849511682"
      crossorigin="anonymous"></script>
@@ -417,10 +411,9 @@
     
 (adsbygoogle = window.adsbygoogle || []).push({});
     window.addEventListener('load', () => {
-      // Vérifiez si l'URL correspond au format /counter/:channelId
-      const pathParts = window.location.pathname.split('/');
-      if (pathParts.length >= 3 && pathParts[1] === 'counter') {
-        channelId = pathParts[2];
+      const urlFragment = window.location.hash.slice(1);
+      if (urlFragment) {
+        channelId = urlFragment;
         document.getElementById("counter-container").style.display = "flex";
         document.getElementById("share-button").style.display = "block";
         fetchStatsData();
@@ -428,6 +421,9 @@
         document.getElementById("only-count-button").style.display = "inline-block";
       }
     });
+
+if (window.location.pathname.startsWith("/counter/:ChannelID")) {
+}
 
     function handleKeyPress(event) {
       if (event.key === "Enter") {
@@ -496,7 +492,7 @@
         channelElement.textContent = channel[0];
         channelElement.classList.add("channel-result");
         channelElement.onclick = () => {
-          const newUrl = `${window.location.origin}/counter/${channel[2]}`;
+          const newUrl = `${window.location.origin}/#${channel[2]}`;
           window.history.pushState({}, '', newUrl);
 
           channelId = channel[2];
@@ -681,21 +677,12 @@
 
       document.getElementById("only-count-button").style.display = "none";
       
-window.addEventListener('load', () => {
-  // Vérifie si l'URL correspond au format /counter/:channelId
-  const pathParts = window.location.pathname.split('/');
-  if (pathParts.length >= 3 && pathParts[1] === 'counter') {
-    channelId = pathParts[2];
-    document.getElementById("counter-container").style.display = "flex";
-    document.getElementById("share-button").style.display = "block";
-    fetchStatsData();
-    intervalId = setInterval(fetchStatsData, 2000);
-    document.getElementById("only-count-button").style.display = "inline-block";
-    
-    // Ajoutez cette ligne pour mettre à jour le titre
-    document.title = "FastCount - Loading...";
-  }
-});
+      window.addEventListener('load', () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('only-count') === 'true') {
+          activateOnlyCount();
+        }
+      });
 
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set('only-count', 'true');
@@ -711,13 +698,13 @@ window.addEventListener('load', () => {
       const channelName = document.getElementById("channel-name").textContent || "YouTube channel";
       const count = document.getElementById("subscriber-count").textContent || "0";
       const text = `Check out ${channelName}'s subscriber count: ${count} on FastCount!`;
-      const url = `${window.location.origin}/counter/${channelId}`;
+      const url = window.location.href;
       window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
       document.getElementById("share-options").style.display = "none";
     }
     
     function copyLink() {
-      const url = `${window.location.origin}/counter/${channelId}`;
+      const url = window.location.href;
       navigator.clipboard.writeText(url).then(() => {
         alert("Link copied to clipboard!");
         document.getElementById("share-options").style.display = "none";
@@ -760,6 +747,13 @@ window.addEventListener('load', () => {
     }
 
     document.title = `${data.author} - Live Sub Count`;
+
+    app.get ('/counter/:channelId', (req, res) => {
+      const channelId = req.params.channelId;
+      const channelName = req.query.channelName || 'YouTube Channel';
+      const channelTitle = req.query.channelTitle || 'FastCount';
+      res.render('counter', { channelId, channelName, channelTitle });
+    });
   </script>
 </body>
 </html>
