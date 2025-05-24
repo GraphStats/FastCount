@@ -585,21 +585,25 @@
       
       // Search with Enter when input is focused
       if (event.key === 'Enter' && document.activeElement === elements.channelInput) {
+        event.preventDefault();
         fetchChannelData();
       }
       
       // Toggle chart with C key
       if (event.CtrlKey && event.key === 'c' && channelId) {
+        event.preventDefault();
         toggleChart();
       }
       
       // Toggle only count mode with O key
       if (event.CtrlKey && event.key === 'o' && channelId) {
+        event.preventDefault();
         activateOnlyCount();
       }
       
       // Toggle theme with T key
       if (event.CtrlKey && event.key === 't') {
+        event.preventDefault();
         toggleTheme();
       }
     }
