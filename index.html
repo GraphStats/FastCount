@@ -589,17 +589,17 @@
       }
       
       // Toggle chart with C key
-      if (event.key.toLowerCase() === 'c' && channelId) {
+      if (event.CtrlKey && event.key === 'c' && channelId) {
         toggleChart();
       }
       
       // Toggle only count mode with O key
-      if (event.key.toLowerCase() === 'o' && channelId) {
+      if (event.CtrlKey && event.key === 'o' && channelId) {
         activateOnlyCount();
       }
       
       // Toggle theme with T key
-      if (event.key.toLowerCase() === 't') {
+      if (event.CtrlKey && event.key === 't') {
         toggleTheme();
       }
     }
@@ -608,9 +608,9 @@
     function showShortcutsInfo() {
       const shortcuts = [
         {key: 'Enter', action: 'Search channel'},
-        {key: 'C', action: 'Toggle chart'},
-        {key: 'O', action: 'Toggle only count mode'},
-        {key: 'T', action: 'Toggle theme'},
+        {key: 'Ctrl+C', action: 'Toggle chart'},
+        {key: 'Ctrl+O', action: 'Toggle only count mode'},
+        {key: 'Ctrl+C', action: 'Toggle theme'},
         {key: 'Ctrl+F or /', action: 'Focus search'}
       ];
       
@@ -962,13 +962,6 @@
         document.body.style.background = "#f5f5f5";
         document.body.style.color = "#333";
       }
-    }
-    
-    // Update visitor count
-    function updateVisitorCount() {
-      // Simulate random visitor count (in a real app, this would come from analytics)
-      const randomVisitors = Math.floor(Math.random() * 50) + 20;
-      elements.visitorCount.textContent = randomVisitors;
     }
     
     // Initialize the app when DOM is loaded
