@@ -464,7 +464,6 @@
   
   <div class="toast" id="toast"></div>
   
-  <div id="shortcuts-info" title="Keyboard Shortcuts" onclick="showShortcutsInfo()">⌨️ Shortcuts</div>
 
   <script>
     // Constants
@@ -573,57 +572,6 @@
       elements.chartContainer.style.display = "none";
       elements.toggleChartButton.textContent = "Show Subscriber History";
       historicalData = [];
-    }
-    
-    // Handle keyboard shortcuts
-    function handleKeyboardShortcuts(event) {
-      // Focus search input with Ctrl+F or /
-      if ((event.ctrlKey && event.key === 'f') || event.key === '/') {
-        event.preventDefault();
-        elements.channelInput.focus();
-      }
-      
-      // Search with Enter when input is focused
-      if (event.key === 'Enter' && document.activeElement === elements.channelInput) {
-        event.preventDefault();
-        fetchChannelData();
-      }
-      
-      // Toggle chart with C key
-      if (event.CtrlKey && event.key === 'c' && channelId) {
-        event.preventDefault();
-        toggleChart();
-      }
-      
-      // Toggle only count mode with O key
-      if (event.CtrlKey && event.key === 'o' && channelId) {
-        event.preventDefault();
-        activateOnlyCount();
-      }
-      
-      // Toggle theme with T key
-      if (event.CtrlKey && event.key === 't') {
-        event.preventDefault();
-        toggleTheme();
-      }
-    }
-    
-    // Show keyboard shortcuts info
-    function showShortcutsInfo() {
-      const shortcuts = [
-        {key: 'Enter', action: 'Search channel'},
-        {key: 'Ctrl+C', action: 'Toggle chart'},
-        {key: 'Ctrl+O', action: 'Toggle only count mode'},
-        {key: 'Ctrl+C', action: 'Toggle theme'},
-        {key: 'Ctrl+F or /', action: 'Focus search'}
-      ];
-      
-      let message = 'Keyboard Shortcuts:\n\n';
-      shortcuts.forEach(shortcut => {
-        message += `${shortcut.key}: ${shortcut.action}\n`;
-      });
-      
-      alert(message);
     }
     
     // Show toast notification
