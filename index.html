@@ -11,413 +11,409 @@
   <link rel="icon" type="image/png" href="https://cdn.glitch.global/3646dfb4-5cb1-4c3c-9337-1d56b96025d2/Design_sans_titre-removebg-preview%20(1).png?v=1746820022653">
   <meta name="trustpilot-one-time-domain-verification-id" content="3d078e23-117c-46ae-991c-63c340043c1f"/>
   <meta name="description" content="FastCount Is THE BEST Counter">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7562628849511682"
-     crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7562628849511682" crossorigin="anonymous"></script>
   <meta name="google-adsense-account" content="ca-pub-7562628849511682">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-T4X83ZSG');</script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T4X83ZSG');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-QMLQLT7FTY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-QMLQLT7FTY');
-</script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-QMLQLT7FTY');
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
 </head>
 <style>
-      * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      height: 100vh;
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      overflow: hidden;
-      position: relative;
-    }
-
-    #logo {
-      position: absolute;
-      font-family: 'Roboto', sans-serif;
-      top: 20px;
-      left: 20px;
-      width: 250px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    #logo:hover {
-      transform: scale(1.1) rotate(5deg);
-    }
-
-    .glass-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border-radius: 20px;
-      padding: 30px;
-      text-align: center;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      max-width: 90%;
-      margin: 20px;
-    }
-
-    input[type="text"] {
-      width: 300px;
-      padding: 15px;
-      font-size: 18px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      color: #00fff0;
-      text-align: center;
-    }
-
-    button {
-      padding: 15px 30px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #00fff0, #008080);
-      color: black;
-      font-weight: bold;
-      font-size: 18px;
-      cursor: pointer;
-      font-family: 'Roboto', sans-serif;
-      transition: background 0.3s, transform 0.2s;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background: linear-gradient(135deg, #00c0ff, #006666);
-      transform: scale(1.05);
-    }
-
-    #result-list {
-      display: flex;
-      font-family: 'Roboto', sans-serif;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 30px;
-      gap: 20px;
-    }
-
-    .channel-result {
-      font-family: 'Roboto', sans-serif;
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 20px;
-      color: #00fff0;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      min-width: 200px;
-      text-align: center;
-      font-size: 1.2em;
-    }
-
-    .channel-result:hover {
-      transform: scale(1.1);
-    }
-
-    #counter-container {
-      font-family: 'Roboto', sans-serif;
-      display: none;
-      margin-top: 30px;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    #channel-avatar {
-      font-family: 'Roboto', sans-serif;
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      border: 3px solid #00fff0;
-      object-fit: cover;
-    }
-
-    #channel-name {
-      font-family: 'Roboto', sans-serif;
-      font-size: 2em;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    #subscriber-count {
-      font-family: 'Roboto', sans-serif;
-      font-size: 5em;
-      color: #ffffff;
-      margin-top: 5px;
-    }
-
-    #footer {
-      font-family: 'Roboto', sans-serif;
-      position: absolute;
-      bottom: 15px;
-      font-size: 0.9em;
-      color: #aaa;
-      text-align: center;
-    }
-
-    #only-count-button {
-      display: none;
-    }
-    
-    .loader {
-      display: none;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #00fff0;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    #share-button {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #00c0ff, #006666);
-      padding: 10px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      display: none;
-    }
-    
-    #share-button:hover {
-      background: linear-gradient(135deg, #00fff0, #008080);
-    }
-    
-    .share-options {
-      display: none;
-      position: absolute;
-      top: 60px;
-      right: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 10px;
-      padding: 10px;
-      z-index: 100;
-    }
-    
-    .share-option {
-      padding: 8px 12px;
-      margin: 5px 0;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    
-    .share-option:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    @keyframes buttonClickAnimation {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.1); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    #share-button.clicked {
-     animation: buttonClickAnimation 0.3s ease-in-out;
-    }
-
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateX(100%);
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
+
+  body {
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    overflow: hidden;
+    position: relative;
+    transition: background 0.3s ease, color 0.3s ease;
   }
-}
 
-.share-options {
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 10px;
-  padding: 10px;
-  z-index: 100;
-  animation: slideIn 0.3s ease-out forwards;
-}
+  body.light-theme {
+    background: #f5f5f5;
+    color: #333;
+  }
 
-#main-content {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-#main-content.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.share-option {
-  padding: 8px 12px;
-  margin: 5px 0;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.share-option:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Chart container styles */
-#chart-container {
-  width: 90%;
-  max-width: 800px;
-  margin: 20px auto;
-  display: none;
-}
-
-#subscriberChart {
-  width: 100% !important;
-  height: 400px !important;
-}
-
-/* Toggle chart button */
-#toggle-chart-button {
-  margin-top: 20px;
-  background: linear-gradient(135deg, #00fff0, #008080);
-}
-
-/* Dark mode toggle */
-#theme-toggle {
-  position: absolute;
-  bottom: 40px;
-  right: 20px;
-  z-index: 100;
-}
-
-/* Notification toast */
-.toast {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 255, 240, 0.9);
-  color: #000;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: bold;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 1000;
-}
-
-.toast.show {
-  opacity: 1;
-}
-
-/* Keyboard shortcuts info */
-#shortcuts-info {
-  position: absolute;
-  top: 20px;
-  right: 100px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.8em;
-  cursor: help;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
   #logo {
-    width: 180px;
-  }
-  
-  input[type="text"] {
+    position: absolute;
+    top: 20px;
+    left: 20px;
     width: 250px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
   }
-  
-  #subscriber-count {
-    font-size: 3em;
+
+  #logo:hover {
+    transform: scale(1.1) rotate(5deg);
   }
-  
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    max-width: 90%;
+    margin: 20px;
+    transition: all 0.3s ease;
+  }
+
+  body.light-theme .glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  input[type="text"] {
+    width: 300px;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #00fff0;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  body.light-theme input[type="text"] {
+    background: rgba(0, 0, 0, 0.05);
+    color: #008080;
+  }
+
+  button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #00fff0, #008080);
+    color: black;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+
+  button:hover {
+    background: linear-gradient(135deg, #00c0ff, #006666);
+    transform: scale(1.05);
+  }
+
+  #result-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 20px;
+  }
+
+  .channel-result {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    color: #00fff0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    text-align: center;
+    font-size: 1.2em;
+  }
+
+  body.light-theme .channel-result {
+    background: rgba(0, 0, 0, 0.05);
+    color: #008080;
+  }
+
+  .channel-result:hover {
+    transform: scale(1.1);
+  }
+
+  #counter-container {
+    display: none;
+    margin-top: 30px;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
   #channel-avatar {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #00fff0;
+    object-fit: cover;
+    transition: all 0.3s ease;
+  }
+
+  body.light-theme #channel-avatar {
+    border-color: #008080;
+  }
+
+  #channel-name {
+    font-size: 2em;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  #subscriber-count {
+    font-size: 5em;
+    color: #ffffff;
+    margin-top: 5px;
+    transition: color 0.3s ease;
+  }
+
+  body.light-theme #subscriber-count {
+    color: #333;
+  }
+
+  #subscriber-change {
+    font-size: 1.2em;
+    margin-top: 5px;
+  }
+
+  #footer {
+    position: absolute;
+    bottom: 15px;
+    font-size: 0.9em;
+    color: #aaa;
+    text-align: center;
+  }
+
+  #only-count-button {
+    display: none;
+  }
+  
+  .loader {
+    display: none;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #00fff0;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
   
   #share-button {
-    top: 15px;
-    right: 15px;
-    padding: 8px 12px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #00c0ff, #006666);
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: none;
+    transition: all 0.3s ease;
+  }
+  
+  #share-button:hover {
+    background: linear-gradient(135deg, #00fff0, #008080);
   }
   
   .share-options {
-    top: 50px;
-    right: 15px;
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 100;
+    animation: slideIn 0.3s ease-out forwards;
   }
-}
 
-@media (max-width: 480px) {
-  #logo {
-    width: 150px;
-    top: 15px;
-    left: 15px;
+  body.light-theme .share-options {
+    background: rgba(0, 0, 0, 0.1);
   }
   
-  input[type="text"] {
-    width: 200px;
-    padding: 12px;
+  .share-option {
+    padding: 8px 12px;
+    margin: 5px 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  body.light-theme .share-option {
+    background: rgba(0, 0, 0, 0.1);
   }
   
-  button {
+  .share-option:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  body.light-theme .share-option:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  @keyframes buttonClickAnimation {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  #share-button.clicked {
+    animation: buttonClickAnimation 0.3s ease-in-out;
+  }
+
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  #main-content {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  #main-content.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Chart container styles */
+  #chart-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    display: none;
+  }
+
+  #subscriberChart {
+    width: 100% !important;
+    height: 400px !important;
+  }
+
+  /* Toggle chart button */
+  #toggle-chart-button {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #00fff0, #008080);
+  }
+
+  /* Notification toast */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 255, 240, 0.9);
+    color: #000;
     padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
   }
-  
-  #subscriber-count {
-    font-size: 2.5em;
+
+  body.light-theme .toast {
+    background: rgba(0, 200, 200, 0.9);
   }
-  
-  #theme-toggle {
-    bottom: 30px;
-    right: 15px;
+
+  .toast.show {
+    opacity: 1;
   }
-  
-  #live-visitors {
-    bottom: 5px;
-    right: 15px;
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    #logo {
+      width: 180px;
+    }
+    
+    input[type="text"] {
+      width: 250px;
+    }
+    
+    #subscriber-count {
+      font-size: 3em;
+    }
+    
+    #channel-avatar {
+      width: 100px;
+      height: 100px;
+    }
+    
+    #share-button {
+      top: 15px;
+      right: 15px;
+      padding: 8px 12px;
+    }
+    
+    .share-options {
+      top: 50px;
+      right: 15px;
+    }
   }
-}
+
+  @media (max-width: 480px) {
+    #logo {
+      width: 150px;
+      top: 15px;
+      left: 15px;
+    }
+    
+    input[type="text"] {
+      width: 200px;
+      padding: 12px;
+    }
+    
+    button {
+      padding: 12px 24px;
+    }
+    
+    #subscriber-count {
+      font-size: 2.5em;
+    }
+    
+    #theme-toggle {
+      bottom: 30px;
+      right: 15px;
+    }
+  }
 </style>
 <body>
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T4X83ZSG"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T4X83ZSG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
   <img id="logo" src="https://cdn.glitch.global/3646dfb4-5cb1-4c3c-9337-1d56b96025d2/Design_sans_titre-removebg-preview.png?v=1746819783500" onclick="window.location.href='/'" alt="FastCount Logo">
 
   <div id="search-bar-container">
@@ -436,19 +432,20 @@
     <div class="share-option" onclick="shareAsImage()">Share as Image</div>
   </div>
   
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-7562628849511682"
-     data-ad-slot="2412018290"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-7562628849511682"
+       data-ad-slot="2412018290"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  
   <div id="result-list"></div>
 
   <div id="counter-container">
     <img id="channel-avatar" src="" alt="Channel Avatar">
     <div id="channel-name"></div>
     <div id="subscriber-count" class="odometer">0</div>
-    <div id="subscriber-change" style="font-size: 1.2em; margin-top: 5px;"></div>
+    <div id="subscriber-change"></div>
     <button id="toggle-chart-button" onclick="toggleChart()">Show Subscriber History</button>
   </div>
   
@@ -463,7 +460,6 @@
   <button id="only-count-button" onclick="activateOnlyCount()">Only Count</button>
   
   <div class="toast" id="toast"></div>
-  
 
   <script>
     // Constants
@@ -471,17 +467,21 @@
     const SEARCH_API_URL = 'https://mixerno.space/api/youtube-channel-counter/search/';
     const MAX_DATA_POINTS = 3600;
     const UPDATE_INTERVAL = 2000;
+    const VISITOR_UPDATE_INTERVAL = 60000; // 1 minute
     
-    // Global variables
-    let channelId;
-    let intervalId;
-    let odometer;
-    let subscriberChart;
-    let historicalData = [];
-    let lastSubscriberCount = 0;
-    let visitorCountInterval;
+    // State management
+    const state = {
+      channelId: null,
+      intervalId: null,
+      odometer: null,
+      subscriberChart: null,
+      historicalData: [],
+      lastSubscriberCount: 0,
+      visitorCountInterval: null,
+      isLightTheme: localStorage.getItem('theme') === 'light'
+    };
     
-    // DOM elements
+    // DOM elements cache
     const elements = {
       channelInput: document.getElementById("channel-input"),
       loader: document.getElementById("loader"),
@@ -497,8 +497,8 @@
       shareOptions: document.getElementById("share-options"),
       onlyCountButton: document.getElementById("only-count-button"),
       toast: document.getElementById("toast"),
-      visitorCount: document.getElementById("visitor-count"),
-      themeToggle: document.getElementById("theme-toggle")
+      themeToggle: document.getElementById("theme-toggle"),
+      body: document.body
     };
     
     // Initialize the application
@@ -506,8 +506,18 @@
       setupEventListeners();
       checkUrlFragment();
       updateVisitorCount();
-      visitorCountInterval = setInterval(updateVisitorCount, VISITOR_UPDATE_INTERVAL);
+      state.visitorCountInterval = setInterval(updateVisitorCount, VISITOR_UPDATE_INTERVAL);
       showToast('Welcome to FastCount!', 3000);
+      
+      // Apply saved theme
+      if (state.isLightTheme) {
+        applyLightTheme();
+      }
+      
+      // Show main content with fade-in animation
+      setTimeout(() => {
+        document.getElementById('main-content').classList.add('visible');
+      }, 100);
     }
     
     // Set up event listeners
@@ -516,30 +526,33 @@
       document.addEventListener('keydown', handleKeyboardShortcuts);
       
       // Click outside share options to close them
-      document.addEventListener('click', function(event) {
+      document.addEventListener('click', (event) => {
         if (!elements.shareButton.contains(event.target) && !elements.shareOptions.contains(event.target)) {
           elements.shareOptions.style.display = "none";
         }
       });
       
       // Handle back/forward navigation
-      window.addEventListener('popstate', function() {
-        const urlFragment = window.location.hash.slice(1);
-        if (urlFragment && urlFragment !== channelId) {
-          resetCounter();
-          channelId = urlFragment;
-          startCounter();
-        } else if (!urlFragment) {
-          resetCounter();
-        }
-      });
+      window.addEventListener('popstate', handleNavigation);
+    }
+    
+    // Handle navigation events
+    function handleNavigation() {
+      const urlFragment = window.location.hash.slice(1);
+      if (urlFragment && urlFragment !== state.channelId) {
+        resetCounter();
+        state.channelId = urlFragment;
+        startCounter();
+      } else if (!urlFragment) {
+        resetCounter();
+      }
     }
     
     // Check URL fragment for channel ID
     function checkUrlFragment() {
       const urlFragment = window.location.hash.slice(1);
       if (urlFragment) {
-        channelId = urlFragment;
+        state.channelId = urlFragment;
         startCounter();
       }
     }
@@ -550,8 +563,8 @@
       elements.shareButton.style.display = "block";
       elements.onlyCountButton.style.display = "inline-block";
       
-      if (!odometer) {
-        odometer = new Odometer({ 
+      if (!state.odometer) {
+        state.odometer = new Odometer({ 
           el: elements.subscriberCount, 
           value: 0,
           format: '(,ddd)'
@@ -559,18 +572,19 @@
       }
       
       fetchStatsData();
-      intervalId = setInterval(fetchStatsData, UPDATE_INTERVAL);
+      state.intervalId = setInterval(fetchStatsData, UPDATE_INTERVAL);
     }
     
     // Reset the counter
     function resetCounter() {
-      clearInterval(intervalId);
+      clearInterval(state.intervalId);
       elements.counterContainer.style.display = "none";
       elements.shareButton.style.display = "none";
       elements.onlyCountButton.style.display = "none";
       elements.chartContainer.style.display = "none";
       elements.toggleChartButton.textContent = "Show Subscriber History";
-      historicalData = [];
+      state.historicalData = [];
+      document.title = "FastCount";
     }
     
     // Show toast notification
@@ -590,6 +604,18 @@
       }
     }
     
+    // Handle keyboard shortcuts
+    function handleKeyboardShortcuts(event) {
+      // Ctrl+Enter to search
+      if (event.ctrlKey && event.key === 'Enter') {
+        fetchChannelData();
+      }
+      // Escape to clear search
+      if (event.key === 'Escape') {
+        elements.channelInput.value = '';
+      }
+    }
+    
     // Fetch channel data based on search input
     async function fetchChannelData() {
       const channelName = elements.channelInput.value.trim();
@@ -603,11 +629,12 @@
       
       try {
         const response = await fetch(`${SEARCH_API_URL}${encodeURIComponent(channelName)}`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        
         const data = await response.json();
-
         elements.loader.style.display = "none";
         
-        if (!data.list || data.list.length === 0) {
+        if (!data.list?.length) {
           showToast("Channel not found.");
           return;
         }
@@ -633,7 +660,7 @@
           const newUrl = `${window.location.origin}/#${channel[2]}`;
           window.history.pushState({}, '', newUrl);
 
-          channelId = channel[2];
+          state.channelId = channel[2];
           resetCounter();
           startCounter();
           elements.resultList.innerHTML = "";
@@ -647,15 +674,15 @@
     function initializeChart() {
       const ctx = document.getElementById('subscriberChart').getContext('2d');
       
-      subscriberChart = new Chart(ctx, {
+      state.subscriberChart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: [],
           datasets: [{
             label: 'Subscribers',
             data: [],
-            borderColor: '#00fff0',
-            backgroundColor: 'rgba(0, 255, 240, 0.1)',
+            borderColor: state.isLightTheme ? '#008080' : '#00fff0',
+            backgroundColor: state.isLightTheme ? 'rgba(0, 128, 128, 0.1)' : 'rgba(0, 255, 240, 0.1)',
             borderWidth: 3,
             tension: 0.1,
             pointRadius: 0,
@@ -690,11 +717,11 @@
             y: {
               display: false,
               grid: {
-                color: 'rgba(255, 255, 255, 0.1)',
+                color: state.isLightTheme ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
                 drawBorder: false
               },
               ticks: {
-                color: 'rgba(255, 255, 255, 0.6)',
+                color: state.isLightTheme ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.6)',
                 callback: function(value) {
                   if (value >= 1000000) {
                     return (value / 1000000).toFixed(1) + 'M';
@@ -722,30 +749,31 @@
       const timeString = now.toLocaleTimeString();
       
       // Add new data point
-      historicalData.push({
+      state.historicalData.push({
         time: timeString,
         count: count
       });
       
       // Keep only the last MAX_DATA_POINTS
-      if (historicalData.length > MAX_DATA_POINTS) {
-        historicalData.shift();
+      if (state.historicalData.length > MAX_DATA_POINTS) {
+        state.historicalData.shift();
       }
       
-      // Update chart data
-      if (!subscriberChart) {
+      // Initialize chart if not already done
+      if (!state.subscriberChart) {
         initializeChart();
       }
       
-      subscriberChart.data.labels = historicalData.map(data => data.time);
-      subscriberChart.data.datasets[0].data = historicalData.map(data => data.count);
-      subscriberChart.update();
+      // Update chart data
+      state.subscriberChart.data.labels = state.historicalData.map(data => data.time);
+      state.subscriberChart.data.datasets[0].data = state.historicalData.map(data => data.count);
+      state.subscriberChart.update();
     }
     
     // Fetch stats data for the current channel
     async function fetchStatsData() {
       try {
-        const response = await fetch(`${API_BASE_URL}${channelId}`);
+        const response = await fetch(`${API_BASE_URL}${state.channelId}`);
         
         if (response.ok) {
           const data = await response.json();
@@ -759,12 +787,12 @@
               updateSubscriberCount(subscriberCount);
               
               // Calculate and display subscriber change
-              if (lastSubscriberCount > 0) {
-                const change = subscriberCount - lastSubscriberCount;
+              if (state.lastSubscriberCount > 0) {
+                const change = subscriberCount - state.lastSubscriberCount;
                 updateSubscriberChange(change);
               }
               
-              lastSubscriberCount = subscriberCount;
+              state.lastSubscriberCount = subscriberCount;
               updateChart(subscriberCount);
             }
           }
@@ -785,14 +813,14 @@
     
     // Update subscriber count display
     function updateSubscriberCount(count) {
-      if (!odometer) {
-        odometer = new Odometer({ 
+      if (!state.odometer) {
+        state.odometer = new Odometer({ 
           el: elements.subscriberCount, 
           value: count,
           format: '(,ddd)'
         });
       } else {
-        odometer.update(count);
+        state.odometer.update(count);
       }
     }
     
@@ -800,7 +828,7 @@
     function updateSubscriberChange(change) {
       if (change === 0) {
         elements.subscriberChange.textContent = "→ No change";
-        elements.subscriberChange.style.color = "#aaa";
+        elements.subscriberChange.style.color = state.isLightTheme ? "#666" : "#aaa";
       } else if (change > 0) {
         elements.subscriberChange.textContent = `↑ +${change.toLocaleString()}`;
         elements.subscriberChange.style.color = "#00ff00";
@@ -816,9 +844,9 @@
         elements.chartContainer.style.display = 'block';
         elements.toggleChartButton.textContent = 'Hide Subscriber History';
         
-        if (!subscriberChart && historicalData.length > 0) {
+        if (!state.subscriberChart && state.historicalData.length > 0) {
           initializeChart();
-          updateChart(historicalData[historicalData.length - 1].count);
+          updateChart(state.historicalData[state.historicalData.length - 1].count);
         }
       } else {
         elements.chartContainer.style.display = 'none';
@@ -828,7 +856,7 @@
     
     // Activate only count mode
     function activateOnlyCount() {
-      elements.searchBarContainer.style.display = "none";
+      document.getElementById('search-bar-container').style.display = "none";
       elements.channelAvatar.style.display = "none";
       elements.channelName.style.display = "none";
       elements.shareButton.style.display = "none";
@@ -890,34 +918,50 @@
       elements.shareOptions.style.display = "none";
     }
     
-    // Toggle theme
-    function toggleTheme() {
-      document.body.classList.toggle('light-theme');
-      const isLight = document.body.classList.contains('light-theme');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      
-      if (isLight) {
-        document.body.style.background = "#f5f5f5";
-        document.body.style.color = "#333";
-      } else {
-        document.body.style.background = "linear-gradient(135deg, #0f0c29, #302b63, #24243e)";
-        document.body.style.color = "#fff";
+    // Apply light theme
+    function applyLightTheme() {
+      elements.body.classList.add('light-theme');
+      if (state.subscriberChart) {
+        state.subscriberChart.data.datasets[0].borderColor = '#008080';
+        state.subscriberChart.data.datasets[0].backgroundColor = 'rgba(0, 128, 128, 0.1)';
+        state.subscriberChart.options.scales.y.ticks.color = 'rgba(0, 0, 0, 0.6)';
+        state.subscriberChart.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.1)';
+        state.subscriberChart.update();
       }
     }
     
-    // Check for saved theme preference
-    function checkSavedTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'light') {
-        document.body.classList.add('light-theme');
-        document.body.style.background = "#f5f5f5";
-        document.body.style.color = "#333";
+    // Apply dark theme
+    function applyDarkTheme() {
+      elements.body.classList.remove('light-theme');
+      if (state.subscriberChart) {
+        state.subscriberChart.data.datasets[0].borderColor = '#00fff0';
+        state.subscriberChart.data.datasets[0].backgroundColor = 'rgba(0, 255, 240, 0.1)';
+        state.subscriberChart.options.scales.y.ticks.color = 'rgba(255, 255, 255, 0.6)';
+        state.subscriberChart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+        state.subscriberChart.update();
       }
+    }
+    
+    // Toggle theme
+    function toggleTheme() {
+      state.isLightTheme = !state.isLightTheme;
+      localStorage.setItem('theme', state.isLightTheme ? 'light' : 'dark');
+      
+      if (state.isLightTheme) {
+        applyLightTheme();
+      } else {
+        applyDarkTheme();
+      }
+    }
+    
+    // Update visitor count (mock function)
+    function updateVisitorCount() {
+      // In a real implementation, this would fetch from an analytics API
+      console.log("Updating visitor count...");
     }
     
     // Initialize the app when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
-      checkSavedTheme();
       init();
       (adsbygoogle = window.adsbygoogle || []).push({});
     });
