@@ -35,17 +35,19 @@
   }
 
   body {
-    height: 100vh;
+    /* Suppression du height: 100vh et overflow: hidden pour desktop */
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     color: #ffffff;
-    overflow: hidden;
     position: relative;
     transition: background 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   body.light-theme {
@@ -525,6 +527,52 @@
     }
     .customization-fields input[type="text"] {
       width: 100%;
+    }
+  }
+
+  /* Ajout : styles desktop pour le panneau de personnalisation */
+  @media (min-width: 701px) {
+    #customization-panel {
+      width: 480px;
+      min-width: 320px;
+      max-width: 480px;
+      padding: 0;
+    }
+    .customization-options {
+      flex-direction: row;
+      gap: 48px;
+      padding: 32px 32px 32px 32px;
+    }
+    .customization-fields label, .customization-switches label {
+      font-size: 1.1em;
+    }
+    .customization-fields input[type="text"] {
+      width: 200px;
+    }
+  }
+
+  @media (min-width: 900px) {
+    #main-content {
+      width: 800px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    .glass-card {
+      max-width: 700px;
+      margin: 30px auto;
+    }
+    #search-bar-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 20px auto;
+    }
+    #result-list {
+      max-width: 700px;
+      margin: 30px auto 0 auto;
+    }
+    #counter-container {
+      max-width: 700px;
+      margin: 30px auto 0 auto;
     }
   }
 </style>
