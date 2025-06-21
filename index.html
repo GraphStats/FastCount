@@ -374,6 +374,15 @@
     background: linear-gradient(135deg, #cbb4f6, #171521);
   }
   
+  #customization-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1999;
+    display: none;
+    transition: opacity 0.3s;
+  }
+  
   #customization-panel {
     position: fixed;
     top: 0;
@@ -388,10 +397,13 @@
     display: flex;
     flex-direction: column;
     padding: 0;
+    overflow-y: auto;
+    max-height: 100vh;
   }
   
   #customization-panel.open {
     right: 0;
+    box-shadow: -2px 0 32px rgba(0,0,0,0.35);
   }
   
   .customization-header {
@@ -500,6 +512,7 @@
     #customization-panel {
       width: 100vw;
       min-width: 0;
+      max-width: 100vw;
     }
   }
 </style>
@@ -526,6 +539,7 @@
   </div>
   
   <button id="customization-btn">Customization</button>
+  <div id="customization-overlay" style="display:none;"></div>
   <div id="customization-panel">
     <div class="customization-header">
       <span>Customization</span>
@@ -1095,6 +1109,25 @@
       // In a real implementation, this would fetch from an analytics API
       console.log("Updating visitor count...");
     }
+    
+    // --- Customization panel open/close logic ---
+    function openCustomizationPanel() {
+      document.getElementById('customization-panel').classList.add('open');
+      document.getElementById('customization-overlay').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('customization-overlay').style.opacity = '1';
+      }, 10);
+    }
+    function closeCustomizationPanel() {
+      document.getElementById('customization-panel').classList.remove('open');
+      document.getElementById('customization-overlay').style.opacity = '0';
+      setTimeout(() => {
+        document.getElementById('customization-overlay').style.display = 'none';
+      }, 300);
+    }
+    document.getElementById('customization-btn').onclick = openCustomizationPanel;
+    document.getElementById('close-customization').onclick = closeCustomizationPanel;
+    document.getElementById('customization-overlay').onclick = closeCustomizationPanel;
     
     // Fonctionnalité du panneau Customization
 const customizationOptions = {
