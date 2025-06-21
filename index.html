@@ -354,60 +354,152 @@
     opacity: 1;
   }
 
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    #logo {
-      width: 180px;
-    }
-    
-    input[type="text"] {
-      width: 250px;
-    }
-    
-    #subscriber-count {
-      font-size: 3em;
-    }
-    
-    #channel-avatar {
-      width: 100px;
-      height: 100px;
-    }
-    
-    #share-button {
-      top: 15px;
-      right: 15px;
-      padding: 8px 12px;
-    }
-    
-    .share-options {
-      top: 50px;
-      right: 15px;
-    }
+  /* Customization panel styles */
+  #customization-btn {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    z-index: 1100;
+    background: linear-gradient(135deg, #ad91d5, #252331);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
   }
-
-  @media (max-width: 480px) {
-    #logo {
-      width: 150px;
-      top: 15px;
-      left: 15px;
-    }
-    
-    input[type="text"] {
-      width: 200px;
-      padding: 12px;
-    }
-    
-    button {
-      padding: 12px 24px;
-    }
-    
-    #subscriber-count {
-      font-size: 2.5em;
-    }
-    
-    #theme-toggle {
-      bottom: 30px;
-      right: 15px;
+  
+  #customization-btn:hover {
+    background: linear-gradient(135deg, #cbb4f6, #171521);
+  }
+  
+  #customization-panel {
+    position: fixed;
+    top: 0;
+    right: -420px;
+    width: 400px;
+    height: 100vh;
+    background: #18141e;
+    color: #fff;
+    box-shadow: -2px 0 16px rgba(0,0,0,0.2);
+    z-index: 2000;
+    transition: right 0.3s cubic-bezier(.4,2,.6,1);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  
+  #customization-panel.open {
+    right: 0;
+  }
+  
+  .customization-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 24px 10px 24px;
+    font-size: 1.3em;
+    font-weight: bold;
+    border-bottom: 1px solid #252331;
+  }
+  
+  #close-customization {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5em;
+    cursor: pointer;
+  }
+  
+  .customization-tabs {
+    display: flex;
+    border-bottom: 1px solid #252331;
+    margin-bottom: 10px;
+  }
+  
+  .customization-tabs .tab {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 12px 0;
+    font-size: 1em;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: border 0.2s;
+  }
+  
+  .customization-tabs .tab.active {
+    border-bottom: 2px solid #ad91d5;
+    color: #ad91d5;
+  }
+  
+  .customization-options {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 24px 24px 24px;
+    display: flex;
+    gap: 24px;
+  }
+  
+  .customization-switches {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 140px;
+  }
+  
+  .customization-switches label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1em;
+  }
+  
+  .customization-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+  
+  .customization-fields label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1em;
+    gap: 10px;
+  }
+  
+  .customization-fields input[type="text"] {
+    width: 170px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #252331;
+    background: #252331;
+    color: #fff;
+    font-size: 1em;
+  }
+  
+  .customization-fields input[type="color"] {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .customization-fields input[type="checkbox"] {
+    accent-color: #ad91d5;
+    width: 18px;
+    height: 18px;
+  }
+  
+  @media (max-width: 500px) {
+    #customization-panel {
+      width: 100vw;
+      min-width: 0;
     }
   }
 </style>
@@ -431,6 +523,48 @@
     <div class="share-option" onclick="shareOnFacebook()">Facebook</div>
     <div class="share-option" onclick="copyLink()">Copy Link</div>
     <div class="share-option" onclick="shareAsImage()">Share as Image</div>
+  </div>
+  
+  <button id="customization-btn">Customization</button>
+  <div id="customization-panel">
+    <div class="customization-header">
+      <span>Customization</span>
+      <button id="close-customization">×</button>
+    </div>
+    <div class="customization-tabs">
+      <button class="tab active" data-tab="global">Global</button>
+      <button class="tab" data-tab="page">This page</button>
+    </div>
+    <div class="customization-options">
+      <div class="customization-switches">
+        <label><input type="checkbox" checked> Banner</label>
+        <label><input type="checkbox" checked> Avatar</label>
+        <label><input type="checkbox" checked> Platform Icon</label>
+        <label><input type="checkbox" checked> Name</label>
+        <label><input type="checkbox" checked> Username</label>
+        <label><input type="checkbox" checked> Count Name</label>
+        <label><input type="checkbox" checked> Count Icon</label>
+        <label><input type="checkbox" checked> Progress</label>
+        <label><input type="checkbox" checked> Side Counts</label>
+        <label><input type="checkbox" checked> Graph</label>
+        <label><input type="checkbox" checked> Averages</label>
+        <label><input type="checkbox" checked> Gains</label>
+      </div>
+      <div class="customization-fields">
+        <label>Text Font <input type="text" value='"DM Sans Variable", "DM Sans", sans-serif'></label>
+        <label>Count Font <input type="text" value='"Roboto Variable", "Roboto", sans-serif'></label>
+        <label>Count Font Weight <input type="text" value="900"></label>
+        <label>Count Line Height <input type="text" value="1.2em"></label>
+        <label>Odometer Speed <input type="text" value="2.15"></label>
+        <label>Background Color <input type="color" value="#171521"></label>
+        <label>Card Color <input type="color" value="#252331"></label>
+        <label>Count Color <input type="color" value="#ffffff"></label>
+        <label>Graph Color <input type="color" value="#ad91d5"></label>
+        <label>Odometer Up Color <input type="color" value="#ffffff"></label>
+        <label>Odometer Down Color <input type="color" value="#ffffff"></label>
+        <label><input type="checkbox"> Animate Odometer Color</label>
+      </div>
+    </div>
   </div>
   
   <ins class="adsbygoogle"
@@ -961,11 +1095,201 @@
       console.log("Updating visitor count...");
     }
     
-    // Initialize the app when DOM is loaded
-    document.addEventListener('DOMContentLoaded', () => {
-      init();
-      (adsbygoogle = window.adsbygoogle || []).push({});
+    // Fonctionnalité du panneau Customization
+const customizationOptions = {
+  'Banner': {
+    selector: '#logo',
+    type: 'toggle',
+    default: true
+  },
+  'Avatar': {
+    selector: '#channel-avatar',
+    type: 'toggle',
+    default: true
+  },
+  'Platform Icon': {
+    selector: '#logo', // à adapter si autre icône
+    type: 'toggle',
+    default: true
+  },
+  'Name': {
+    selector: '#channel-name',
+    type: 'toggle',
+    default: true
+  },
+  'Username': {
+    selector: '#channel-name', // à adapter si username séparé
+    type: 'toggle',
+    default: true
+  },
+  'Count Name': {
+    selector: '#subscriber-count', // à adapter si label séparé
+    type: 'toggle',
+    default: true
+  },
+  'Count Icon': {
+    selector: '#subscriber-count', // à adapter si icône séparé
+    type: 'toggle',
+    default: true
+  },
+  'Progress': {
+    selector: '#progress-bar', // à adapter si existe
+    type: 'toggle',
+    default: true
+  },
+  'Side Counts': {
+    selector: '#side-counts', // à adapter si existe
+    type: 'toggle',
+    default: true
+  },
+  'Graph': {
+    selector: '#chart-container',
+    type: 'toggle',
+    default: true
+  },
+  'Averages': {
+    selector: '#averages', // à adapter si existe
+    type: 'toggle',
+    default: true
+  },
+  'Gains': {
+    selector: '#subscriber-change',
+    type: 'toggle',
+    default: true
+  }
+};
+
+function applyCustomizationFromStorage() {
+  // Switches
+  document.querySelectorAll('.customization-switches label').forEach(label => {
+    const name = label.textContent.trim();
+    const opt = customizationOptions[name];
+    if (!opt) return;
+    const checkbox = label.querySelector('input[type="checkbox"]');
+    const saved = localStorage.getItem('custom_' + name);
+    const checked = saved === null ? opt.default : saved === 'true';
+    checkbox.checked = checked;
+    const el = document.querySelector(opt.selector);
+    if (el) el.style.display = checked ? '' : 'none';
+    checkbox.addEventListener('change', () => {
+      localStorage.setItem('custom_' + name, checkbox.checked);
+      if (el) el.style.display = checkbox.checked ? '' : 'none';
     });
+  });
+  // Champs texte et couleur
+  const fields = [
+    {label: 'Text Font', selector: 'body', style: 'fontFamily', default: '"DM Sans Variable", "DM Sans", sans-serif'},
+    {label: 'Count Font', selector: '#subscriber-count', style: 'fontFamily', default: '"Roboto Variable", "Roboto", sans-serif'},
+    {label: 'Count Font Weight', selector: '#subscriber-count', style: 'fontWeight', default: '900'},
+    {label: 'Count Line Height', selector: '#subscriber-count', style: 'lineHeight', default: '1.2em'},
+    {label: 'Odometer Speed', selector: '#subscriber-count', style: 'odometerSpeed', default: '2.15'},
+    {label: 'Background Color', selector: 'body', style: 'background', default: '#171521', isColor: true},
+    {label: 'Card Color', selector: '.glass-card', style: 'background', default: '#252331', isColor: true},
+    {label: 'Count Color', selector: '#subscriber-count', style: 'color', default: '#ffffff', isColor: true},
+    {label: 'Graph Color', selector: '#subscriberChart', style: 'graphColor', default: '#ad91d5', isColor: true},
+    {label: 'Odometer Up Color', selector: '#subscriber-count', style: 'odometerUpColor', default: '#ffffff', isColor: true},
+    {label: 'Odometer Down Color', selector: '#subscriber-count', style: 'odometerDownColor', default: '#ffffff', isColor: true},
+    {label: 'Animate Odometer Color', selector: '#subscriber-count', style: 'animateOdometerColor', default: false, isCheckbox: true}
+  ];
+  document.querySelectorAll('.customization-fields label').forEach(label => {
+    const text = label.childNodes[0].textContent.trim();
+    const field = fields.find(f => f.label === text || (f.isCheckbox && label.textContent.includes(f.label)));
+    if (!field) return;
+    let input = label.querySelector('input');
+    if (!input) return;
+    // Valeur initiale
+    let saved = localStorage.getItem('custom_' + field.label);
+    if (field.isCheckbox) {
+      input.checked = saved === null ? field.default : saved === 'true';
+    } else {
+      input.value = saved === null ? field.default : saved;
+    }
+    // Application initiale
+    applyField(field, input.value, input.checked);
+    // Listener
+    input.addEventListener(field.isCheckbox ? 'change' : 'input', () => {
+      if (field.isCheckbox) {
+        localStorage.setItem('custom_' + field.label, input.checked);
+        applyField(field, null, input.checked);
+      } else {
+        localStorage.setItem('custom_' + field.label, input.value);
+        applyField(field, input.value);
+      }
+    });
+  });
+}
+function applyField(field, value, checked) {
+  if (field.isCheckbox) {
+    // Pour Animate Odometer Color, à implémenter selon la lib odometer
+    return;
+  }
+  if (field.style === 'odometerSpeed') {
+    window.odometerOptions = window.odometerOptions || {};
+    window.odometerOptions.duration = parseFloat(value) * 1000;
+    return;
+  }
+  if (field.style === 'graphColor') {
+    // Change la couleur du graph Chart.js
+    if (state.subscriberChart) {
+      state.subscriberChart.data.datasets[0].borderColor = value;
+      state.subscriberChart.update();
+    }
+    return;
+  }
+  if (field.style === 'odometerUpColor' || field.style === 'odometerDownColor') {
+    // À implémenter si odometer supporte
+    return;
+  }
+  const els = document.querySelectorAll(field.selector);
+  els.forEach(el => {
+    if (field.isColor) {
+      if (field.selector === 'body') {
+        el.style.background = value;
+      } else {
+        el.style[field.style] = value;
+      }
+    } else {
+      el.style[field.style] = value;
+    }
+  });
+}
+// Reset boutons
+function setupCustomizationReset() {
+  document.querySelectorAll('.customization-fields label').forEach(label => {
+    const btn = document.createElement('button');
+    btn.textContent = 'Reset';
+    btn.style.marginLeft = '8px';
+    btn.style.background = '#ad91d5';
+    btn.style.color = '#fff';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '6px';
+    btn.style.padding = '2px 10px';
+    btn.style.cursor = 'pointer';
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const input = label.querySelector('input');
+      const text = label.childNodes[0].textContent.trim();
+      const field = fields.find(f => f.label === text || (f.isCheckbox && label.textContent.includes(f.label)));
+      if (!field) return;
+      if (field.isCheckbox) {
+        input.checked = field.default;
+        localStorage.setItem('custom_' + field.label, field.default);
+        applyField(field, null, field.default);
+      } else {
+        input.value = field.default;
+        localStorage.setItem('custom_' + field.label, field.default);
+        applyField(field, field.default);
+      }
+    });
+    label.appendChild(btn);
+  });
+}
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  applyCustomizationFromStorage();
+  setupCustomizationReset();
+});
   </script>
 </body>
 </html>
