@@ -3,31 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FastCount</title>
+  <title>FastCount - YouTube Subscriber Counter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-minimal.css" />
   <link rel="icon" type="image/png" href="https://cdn.glitch.global/3646dfb4-5cb1-4c3c-9337-1d56b96025d2/Design_sans_titre-removebg-preview%20(1).png?v=1746820022653">
-  <meta name="trustpilot-one-time-domain-verification-id" content="3d078e23-117c-46ae-991c-63c340043c1f"/>
-  <meta name="description" content="FastCount Is THE BEST Counter">
+  <meta name="description" content="Real-time YouTube subscriber counter with beautiful analytics">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7562628849511682" crossorigin="anonymous"></script>
   <meta name="google-adsense-account" content="ca-pub-7562628849511682">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-T4X83ZSG');</script>
-  <!-- End Google Tag Manager -->
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QMLQLT7FTY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-QMLQLT7FTY');
-  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
 </head>
 <style>
+  :root {
+    --primary: #FF0000;
+    --primary-light: #FF4D4D;
+    --primary-dark: #CC0000;
+    --text: #1F1F1F;
+    --text-light: #6B7280;
+    --bg: #F9FAFB;
+    --card-bg: #FFFFFF;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --success: #10B981;
+    --danger: #EF4444;
+    --border: #E5E7EB;
+    --radius: 12px;
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark-mode {
+    --primary: #FF3333;
+    --primary-light: #FF6666;
+    --primary-dark: #E60000;
+    --text: #F3F4F6;
+    --text-light: #9CA3AF;
+    --bg: #111827;
+    --card-bg: #1F2937;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+    --border: #374151;
+  }
+
   * {
     margin: 0;
     padding: 0;
@@ -35,752 +51,551 @@
   }
 
   body {
-    /* Suppression du height: 100vh et overflow: hidden pour desktop */
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    transition: var(--transition);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Header */
+  header {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: flex-start;
-    color: #ffffff;
-    position: relative;
-    transition: background 0.3s ease, color 0.3s ease;
-    min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
   }
 
-  body.light-theme {
-    background: #f5f5f5;
-    color: #333;
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
   }
 
-  #logo {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 250px;
-    cursor: pointer;
+  .logo img {
+    height: 40px;
     transition: transform 0.3s ease;
   }
 
-  #logo:hover {
-    transform: scale(1.1) rotate(5deg);
-  }
-
-  .glass-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 30px;
-    text-align: center;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    max-width: 90%;
-    margin: 20px;
-    transition: all 0.3s ease;
-  }
-
-  body.light-theme .glass-card {
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  input[type="text"] {
-    width: 300px;
-    padding: 15px;
-    font-size: 18px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #00fff0;
-    text-align: center;
-    transition: all 0.3s ease;
-  }
-
-  body.light-theme input[type="text"] {
-    background: rgba(0, 0, 0, 0.05);
-    color: #008080;
-  }
-
-  button {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #00fff0, #008080);
-    color: black;
-    font-weight: bold;
-    font-size: 18px;
-    cursor: pointer;
-    font-family: 'Roboto', sans-serif;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-  }
-
-  button:hover {
-    background: linear-gradient(135deg, #00c0ff, #006666);
+  .logo:hover img {
     transform: scale(1.05);
   }
 
-  #result-list {
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .header-actions {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 30px;
-    gap: 20px;
-  }
-
-  .channel-result {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    padding: 20px;
-    color: #00fff0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 200px;
-    text-align: center;
-    font-size: 1.2em;
-  }
-
-  body.light-theme .channel-result {
-    background: rgba(0, 0, 0, 0.05);
-    color: #008080;
-  }
-
-  .channel-result:hover {
-    transform: scale(1.1);
-  }
-
-  #counter-container {
-    display: none;
-    margin-top: 30px;
-    flex-direction: column;
+    gap: 12px;
     align-items: center;
-    gap: 20px;
   }
 
-  #channel-avatar {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    border: 3px solid #00fff0;
-    object-fit: cover;
-    transition: all 0.3s ease;
+  /* Main content */
+  main {
+    flex: 1;
+    padding: 40px 0;
   }
 
-  body.light-theme #channel-avatar {
-    border-color: #008080;
-  }
-
-  #channel-name {
-    font-size: 2em;
-    margin-top: 10px;
-    font-weight: bold;
-  }
-
-  #subscriber-count {
-    font-family: 'Roboto', sans-serif !important;
-    font-size: 5em;
-    color: #ffffff;
-    margin-top: 5px;
-    transition: color 0.3s ease;
-  }
-
-  body.light-theme #subscriber-count {
-    color: #333;
-  }
-
-  #subscriber-change {
-    font-size: 1.2em;
-    margin-top: 5px;
-  }
-
-  #footer {
-    position: absolute;
-    bottom: 15px;
-    font-size: 0.9em;
-    color: #aaa;
+  .hero {
     text-align: center;
+    margin-bottom: 40px;
   }
 
-  #only-count-button {
-    display: none;
+  .hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  
-  .loader {
-    display: none;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #00fff0;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto 24px;
   }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+
+  /* Search section */
+  .search-section {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 32px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  
-  #share-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #00c0ff, #006666);
-    padding: 10px 15px;
-    border-radius: 10px;
+
+  .search-container {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 14px 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    background-color: var(--card-bg);
+    color: var(--text);
+    transition: var(--transition);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
+  }
+
+  .search-btn {
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    display: none;
-    transition: all 0.3s ease;
-  }
-  
-  #share-button:hover {
-    background: linear-gradient(135deg, #00fff0, #008080);
-  }
-  
-  .share-options {
-    display: none;
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 10px;
-    padding: 10px;
-    z-index: 100;
-    animation: slideIn 0.3s ease-out forwards;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  body.light-theme .share-options {
-    background: rgba(0, 0, 0, 0.1);
-  }
-  
-  .share-option {
-    padding: 8px 12px;
-    margin: 5px 0;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  .search-btn:hover {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    transform: translateY(-2px);
   }
 
-  body.light-theme .share-option {
-    background: rgba(0, 0, 0, 0.1);
-  }
-  
-  .share-option:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  body.light-theme .share-option:hover {
-    background: rgba(0, 0, 0, 0.2);
-  }
-
-  @keyframes buttonClickAnimation {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-
-  #share-button.clicked {
-    animation: buttonClickAnimation 0.3s ease-in-out;
-  }
-
-  @keyframes slideIn {
-    0% {
-      opacity: 0;
-      transform: translateX(100%);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  #main-content {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-
-  #main-content.visible {
-    opacity: 1;
+  .search-btn:active {
     transform: translateY(0);
   }
 
-  /* Chart container styles */
-  #chart-container {
-    width: 90%;
-    max-width: 800px;
-    margin: 20px auto;
+  .loader {
+    display: none;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Results section */
+  .results-section {
     display: none;
   }
 
-  #subscriberChart {
-    width: 100% !important;
-    height: 400px !important;
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 24px;
   }
 
-  /* Toggle chart button */
-  #toggle-chart-button {
-    margin-top: 20px;
-    background: linear-gradient(135deg, #00fff0, #008080);
+  .channel-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid var(--border);
   }
 
-  /* Notification toast */
+  .channel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .channel-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+  }
+
+  .channel-name {
+    font-weight: 600;
+    text-align: center;
+    color: var(--text);
+  }
+
+  /* Counter section */
+  .counter-section {
+    display: none;
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 40px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 32px;
+    text-align: center;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .counter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .channel-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .counter-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary);
+  }
+
+  .channel-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .counter-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .action-btn {
+    padding: 8px 16px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .action-btn:hover {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .counter-display {
+    margin: 40px 0;
+  }
+
+  .subscriber-count {
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 8px;
+    font-family: 'Inter', sans-serif !important;
+  }
+
+  .subscriber-change {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .change-positive {
+    color: var(--success);
+  }
+
+  .change-negative {
+    color: var(--danger);
+  }
+
+  .change-neutral {
+    color: var(--text-light);
+  }
+
+  .counter-footer {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  /* Chart section */
+  .chart-section {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 32px;
+    display: none;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .chart-container {
+    width: 100%;
+    height: 400px;
+    margin-top: 24px;
+  }
+
+  /* Theme toggle */
+  .theme-toggle {
+    position: relative;
+    width: 50px;
+    height: 26px;
+  }
+
+  .theme-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider {
+    background-color: var(--primary);
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+
+  /* Toast */
   .toast {
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 255, 240, 0.9);
-    color: #000;
+    background-color: var(--primary);
+    color: white;
     padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: var(--radius);
+    font-weight: 600;
+    box-shadow: var(--card-shadow);
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 1000;
-  }
-
-  body.light-theme .toast {
-    background: rgba(0, 200, 200, 0.9);
   }
 
   .toast.show {
     opacity: 1;
   }
 
-  /* Customization panel styles */
-  #customization-btn {
-    position: absolute;
-    top: 20px;
-    right: 80px;
-    z-index: 1100;
-    background: linear-gradient(135deg, #ad91d5, #252331);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.2s;
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    background-color: var(--card-bg);
+    color: var(--text-light);
+    font-size: 0.9rem;
   }
-  
-  #customization-btn:hover {
-    background: linear-gradient(135deg, #cbb4f6, #171521);
-  }
-  
-  #customization-panel {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 95vw;
-    max-width: 480px;
-    max-height: 90vh;
-    height: auto;
-    background: #18141e;
-    color: #fff;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.35);
-    z-index: 2001;
-    transition: opacity 0.3s, visibility 0.3s;
-    display: none;
-    flex-direction: column;
-    border-radius: 18px;
-    padding: 0;
-    overflow-y: auto;
-    box-sizing: border-box;
-  }
-  
-  #customization-panel.open {
-    display: flex;
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  #customization-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.35);
-    z-index: 2000;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  #customization-overlay.visible {
-    display: block;
-    opacity: 1;
-  }
-  
-  .customization-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 28px 32px 16px 32px;
-    font-size: 1.5em;
-  }
-  
-  #close-customization {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.5em;
-    cursor: pointer;
-  }
-  
-  .customization-tabs {
-    display: flex;
-    border-bottom: 1px solid #252331;
-    margin-bottom: 10px;
-  }
-  
-  .customization-tabs .tab {
-    flex: 1;
-    background: none;
-    border: none;
-    color: #fff;
-    padding: 12px 0;
-    font-size: 1em;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: border 0.2s;
-  }
-  
-  .customization-tabs .tab.active {
-    border-bottom: 2px solid #ad91d5;
-    color: #ad91d5;
-  }
-  
-  .customization-options {
-    flex: 1;
-    overflow-y: auto;
-    padding: 32px 32px 32px 32px;
-    display: flex;
-    gap: 48px;
-  }
-  
-  .customization-switches {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    min-width: 160px;
-  }
-  
-  .customization-switches label {
-    font-size: 1.1em;
-    gap: 12px;
-    padding: 4px 0;
-  }
-  
-  .customization-fields {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    flex: 1;
-    min-width: 220px;
-  }
-  
-  .customization-fields label {
-    font-size: 1.1em;
-    gap: 16px;
-    padding: 4px 0;
-    justify-content: flex-start;
-  }
-  
-  .customization-fields input[type="text"] {
-    width: 200px;
-    padding: 6px 12px;
-    font-size: 1.05em;
-  }
-  
-  .customization-fields input[type="color"] {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .customization-fields input[type="checkbox"] {
-    width: 22px;
-    height: 22px;
-  }
-  
-  @media (max-width: 700px) {
-    #customization-panel {
-      width: 100vw;
-      min-width: 0;
-      max-width: 100vw;
-      padding: 0;
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2rem;
     }
-    .customization-options {
+
+    .search-container {
       flex-direction: column;
-      gap: 32px;
-      padding: 18px 10px 18px 10px;
     }
-    .customization-fields label, .customization-switches label {
-      font-size: 1em;
-    }
-    .customization-fields input[type="text"] {
-      width: 100%;
-    }
-  }
 
-  /* Ajout : styles desktop pour le panneau de personnalisation */
-  @media (min-width: 701px) {
-    #customization-panel {
-      width: 480px;
-      min-width: 320px;
-      max-width: 480px;
-      padding: 0;
-    }
-    .customization-options {
-      flex-direction: row;
-      gap: 48px;
-      padding: 32px 32px 32px 32px;
-    }
-    .customization-fields label, .customization-switches label {
-      font-size: 1.1em;
-    }
-    .customization-fields input[type="text"] {
-      width: 200px;
-    }
-  }
-
-  @media (min-width: 900px) {
-    #main-content {
-      width: 800px;
-      margin: 0 auto;
-      box-sizing: border-box;
-    }
-    .glass-card {
-      max-width: 700px;
-      margin: 30px auto;
-    }
-    #search-bar-container {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto 20px auto;
-    }
-    #result-list {
-      max-width: 700px;
-      margin: 30px auto 0 auto;
-    }
-    #counter-container {
-      max-width: 700px;
-      margin: 30px auto 0 auto;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    body {
-      display: flex;
+    .counter-header {
       flex-direction: column;
+      gap: 20px;
       align-items: center;
-      justify-content: flex-start;
-      padding: 20px;
     }
 
-    #main-content {
-      width: 80%;
-      max-width: 1200px;
-      margin: 0 auto;
+    .channel-info {
+      flex-direction: column;
+      text-align: center;
     }
 
-    .glass-card {
-      max-width: 1000px;
-      margin: 30px auto;
-    }
-
-    #search-bar-container {
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto 20px auto;
-    }
-
-    #result-list {
-      max-width: 1000px;
-      margin: 30px auto 0 auto;
-    }
-
-    #counter-container {
-      max-width: 1000px;
-      margin: 30px auto 0 auto;
-    }
-
-    #chart-container {
-      max-width: 1000px;
-      margin: 30px auto;
+    .subscriber-count {
+      font-size: 3rem;
     }
   }
 
-  @media (min-width: 1200px) {
-    #main-content {
-      width: 1100px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .glass-card {
-      max-width: 1100px;
-      margin: 30px auto;
-    }
-    #search-bar-container {
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto 20px auto;
-    }
-    #result-list {
-      max-width: 1100px;
-      margin: 30px auto 0 auto;
-    }
-    #counter-container {
-      max-width: 1100px;
-      margin: 30px auto 0 auto;
-    }
+  /* Animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  @media (min-width: 1600px) {
-    #main-content {
-      width: 1400px;
-      max-width: 1400px;
-    }
-    .glass-card {
-      max-width: 1400px;
-    }
-    #search-bar-container {
-      max-width: 1200px;
-    }
-    #result-list {
-      max-width: 1400px;
-    }
-    #counter-container {
-      max-width: 1400px;
-    }
-    #chart-container {
-      max-width: 1400px;
-    }
-  }
-
-  @media (min-width: 1920px) {
-    #main-content {
-      width: 1700px;
-      max-width: 1700px;
-    }
-    .glass-card {
-      max-width: 1700px;
-    }
-    #search-bar-container {
-      max-width: 1500px;
-    }
-    #result-list {
-      max-width: 1700px;
-    }
-    #counter-container {
-      max-width: 1700px;
-    }
-    #chart-container {
-      max-width: 1700px;
-    }
+  .fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
   }
 </style>
 <body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T4X83ZSG" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <div id="main-content">
-  <img id="logo" src="https://cdn.glitch.global/3646dfb4-5cb1-4c3c-9337-1d56b96025d2/Design_sans_titre-removebg-preview.png?v=1746819783500" onclick="window.location.href='/'" alt="FastCount Logo">
-
-  <div id="search-bar-container">
-    <div id="search-bar">
-      <input type="text" id="channel-input" placeholder="Enter YouTube channel name" onkeypress="handleKeyPress(event)" />
-      <button onclick="fetchChannelData()">Search</button>
-    </div>
-    <div class="loader" id="loader"></div>
-  </div>
-  
-  <button id="share-button" onclick="toggleShareOptions()">Share</button>
-  <div class="share-options" id="share-options">
-    <div class="share-option" onclick="shareOnTwitter()">Twitter</div>
-    <div class="share-option" onclick="shareOnFacebook()">Facebook</div>
-    <div class="share-option" onclick="copyLink()">Copy Link</div>
-    <div class="share-option" onclick="shareAsImage()">Share as Image</div>
-  </div>
-  
-  <button id="customization-btn">Customization</button>
-  <div id="customization-overlay" style="display:none;"></div>
-  <div id="customization-panel">
-    <div class="customization-header">
-      <span>Customization</span>
-      <button id="close-customization">×</button>
-    </div>
-    <div class="customization-tabs">
-      <button class="tab active" data-tab="global">Global</button>
-      <button class="tab" data-tab="page">This page</button>
-    </div>
-    <div class="customization-options">
-      <div class="customization-switches">
-        <label><input type="checkbox" checked> Banner</label>
-        <label><input type="checkbox" checked> Avatar</label>
-        <label><input type="checkbox" checked> Platform Icon</label>
-        <label><input type="checkbox" checked> Name</label>
-        <label><input type="checkbox" checked> Username</label>
-        <label><input type="checkbox" checked> Count Name</label>
-        <label><input type="checkbox" checked> Count Icon</label>
-        <label><input type="checkbox" checked> Progress</label>
-        <label><input type="checkbox" checked> Side Counts</label>
-        <label><input type="checkbox" checked> Graph</label>
-        <label><input type="checkbox" checked> Averages</label>
-        <label><input type="checkbox" checked> Gains</label>
-      </div>
-      <div class="customization-fields">
-        <label>Text Font <input type="text" value='"DM Sans Variable", "DM Sans", sans-serif'></label>
-        <label>Count Font <input type="text" value='"Roboto Variable", "Roboto", sans-serif'></label>
-        <label>Count Font Weight <input type="text" value="900"></label>
-        <label>Count Line Height <input type="text" value="1.2em"></label>
-        <label>Odometer Speed <input type="text" value="2.15"></label>
-        <label>Background Color <input type="color" value="#171521"></label>
-        <label>Card Color <input type="color" value="#252331"></label>
-        <label>Count Color <input type="color" value="#ffffff"></label>
-        <label>Graph Color <input type="color" value="#ad91d5"></label>
-        <label>Odometer Up Color <input type="color" value="#ffffff"></label>
-        <label>Odometer Down Color <input type="color" value="#ffffff"></label>
-        <label><input type="checkbox"> Animate Odometer Color</label>
+  <header>
+    <div class="container header-content">
+      <a href="/" class="logo">
+        <img src="https://cdn.glitch.global/3646dfb4-5cb1-4c3c-9337-1d56b96025d2/Design_sans_titre-removebg-preview.png?v=1746819783500" alt="FastCount Logo">
+        <span class="logo-text">FastCount</span>
+      </a>
+      <div class="header-actions">
+        <label class="theme-toggle">
+          <input type="checkbox" id="theme-switch">
+          <span class="slider"></span>
+        </label>
       </div>
     </div>
-  </div>
-  
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-7562628849511682"
-       data-ad-slot="2412018290"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  
-  <div id="result-list"></div>
+  </header>
 
-  <div id="counter-container">
-    <img id="channel-avatar" src="" alt="Channel Avatar">
-    <div id="channel-name"></div>
-    <div id="subscriber-count" class="odometer">0</div>
-    <div id="subscriber-change"></div>
-    <button id="toggle-chart-button" onclick="toggleChart()">Show Subscriber History</button>
-  </div>
-  
-  <div class="glass-card" id="chart-container">
-    <canvas id="subscriberChart"></canvas>
-  </div>
-  
-  <div id="theme-toggle">
-    <button onclick="toggleTheme()">🌗 Toggle Theme</button>
-  </div>
-  
-  <button id="only-count-button" onclick="activateOnlyCount()">Only Count</button>
-  
+  <main class="container">
+    <section class="hero fade-in">
+      <h1>YouTube Subscriber Counter</h1>
+      <p>Track real-time subscriber counts and growth analytics for any YouTube channel</p>
+    </section>
+
+    <section class="search-section fade-in">
+      <div class="search-container">
+        <input type="text" class="search-input" id="channel-input" placeholder="Enter YouTube channel name or URL" onkeypress="handleKeyPress(event)">
+        <button class="search-btn" onclick="fetchChannelData()">
+          <span id="search-text">Search</span>
+          <div class="loader" id="loader"></div>
+        </button>
+      </div>
+    </section>
+
+    <section class="results-section" id="results-section">
+      <h2>Search Results</h2>
+      <div class="results-grid" id="results-grid"></div>
+    </section>
+
+    <section class="counter-section" id="counter-section">
+      <div class="counter-header">
+        <div class="channel-info">
+          <img src="" alt="Channel Avatar" class="counter-avatar" id="channel-avatar">
+          <h3 class="channel-title" id="channel-name"></h3>
+        </div>
+        <div class="counter-actions">
+          <button class="action-btn" onclick="shareChannel()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            Share
+          </button>
+          <button class="action-btn" onclick="toggleChart()" id="toggle-chart-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            Show Chart
+          </button>
+        </div>
+      </div>
+
+      <div class="counter-display">
+        <div class="subscriber-count" id="subscriber-count">0</div>
+        <div class="subscriber-change" id="subscriber-change"></div>
+      </div>
+
+      <div class="counter-footer">
+        <button class="action-btn" onclick="refreshCounter()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          Refresh
+        </button>
+        <button class="action-btn" onclick="activateMinimalMode()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="9" y1="21" x2="9" y2="9"></line>
+          </svg>
+          Minimal Mode
+        </button>
+      </div>
+    </section>
+
+    <section class="chart-section" id="chart-section">
+      <h3>Subscriber Growth</h3>
+      <div class="chart-container">
+        <canvas id="subscriberChart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2023 FastCount - Real-time YouTube analytics</p>
+    </div>
+  </footer>
+
   <div class="toast" id="toast"></div>
-  </div>
 
   <script>
     // Constants
@@ -788,7 +603,6 @@
     const SEARCH_API_URL = 'https://mixerno.space/api/youtube-channel-counter/search/';
     const MAX_DATA_POINTS = 3600;
     const UPDATE_INTERVAL = 2000;
-    const VISITOR_UPDATE_INTERVAL = 60000; // 1 minute
     
     // State management
     const state = {
@@ -798,27 +612,25 @@
       subscriberChart: null,
       historicalData: [],
       lastSubscriberCount: 0,
-      visitorCountInterval: null,
-      isLightTheme: localStorage.getItem('theme') === 'light'
+      isDarkTheme: localStorage.getItem('theme') === 'dark'
     };
     
     // DOM elements cache
     const elements = {
       channelInput: document.getElementById("channel-input"),
       loader: document.getElementById("loader"),
-      resultList: document.getElementById("result-list"),
-      counterContainer: document.getElementById("counter-container"),
+      searchText: document.getElementById("search-text"),
+      resultsSection: document.getElementById("results-section"),
+      resultsGrid: document.getElementById("results-grid"),
+      counterSection: document.getElementById("counter-section"),
       channelAvatar: document.getElementById("channel-avatar"),
       channelName: document.getElementById("channel-name"),
       subscriberCount: document.getElementById("subscriber-count"),
       subscriberChange: document.getElementById("subscriber-change"),
       toggleChartButton: document.getElementById("toggle-chart-button"),
-      chartContainer: document.getElementById("chart-container"),
-      shareButton: document.getElementById("share-button"),
-      shareOptions: document.getElementById("share-options"),
-      onlyCountButton: document.getElementById("only-count-button"),
+      chartSection: document.getElementById("chart-section"),
       toast: document.getElementById("toast"),
-      themeToggle: document.getElementById("theme-toggle"),
+      themeSwitch: document.getElementById("theme-switch"),
       body: document.body
     };
     
@@ -826,19 +638,12 @@
     function init() {
       setupEventListeners();
       checkUrlFragment();
-      updateVisitorCount();
-      state.visitorCountInterval = setInterval(updateVisitorCount, VISITOR_UPDATE_INTERVAL);
-      showToast('Welcome to FastCount!', 3000);
       
       // Apply saved theme
-      if (state.isLightTheme) {
-        applyLightTheme();
+      if (state.isDarkTheme) {
+        applyDarkTheme();
+        elements.themeSwitch.checked = true;
       }
-      
-      // Show main content with fade-in animation
-      setTimeout(() => {
-        document.getElementById('main-content').classList.add('visible');
-      }, 100);
     }
     
     // Set up event listeners
@@ -846,15 +651,8 @@
       // Keyboard shortcuts
       document.addEventListener('keydown', handleKeyboardShortcuts);
       
-      // Click outside share options to close them
-      document.addEventListener('click', (event) => {
-        if (!elements.shareButton.contains(event.target) && !elements.shareOptions.contains(event.target)) {
-          elements.shareOptions.style.display = "none";
-        }
-      });
-      
-      // Handle back/forward navigation
-      window.addEventListener('popstate', handleNavigation);
+      // Theme toggle
+      elements.themeSwitch.addEventListener('change', toggleTheme);
     }
     
     // Handle navigation events
@@ -880,15 +678,14 @@
     
     // Start the counter
     function startCounter() {
-      elements.counterContainer.style.display = "flex";
-      elements.shareButton.style.display = "block";
-      elements.onlyCountButton.style.display = "inline-block";
+      elements.counterSection.style.display = "block";
       
       if (!state.odometer) {
         state.odometer = new Odometer({ 
           el: elements.subscriberCount, 
           value: 0,
-          format: '(,ddd)'
+          format: '(,ddd)',
+          theme: 'minimal'
         });
       }
       
@@ -899,13 +696,19 @@
     // Reset the counter
     function resetCounter() {
       clearInterval(state.intervalId);
-      elements.counterContainer.style.display = "none";
-      elements.shareButton.style.display = "none";
-      elements.onlyCountButton.style.display = "none";
-      elements.chartContainer.style.display = "none";
-      elements.toggleChartButton.textContent = "Show Subscriber History";
+      elements.counterSection.style.display = "none";
+      elements.chartSection.style.display = "none";
+      elements.toggleChartButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Show Chart';
       state.historicalData = [];
-      document.title = "FastCount";
+      document.title = "FastCount - YouTube Subscriber Counter";
+    }
+    
+    // Refresh counter manually
+    function refreshCounter() {
+      if (state.channelId) {
+        fetchStatsData();
+        showToast("Counter refreshed", 2000);
+      }
     }
     
     // Show toast notification
@@ -941,12 +744,12 @@
     async function fetchChannelData() {
       const channelName = elements.channelInput.value.trim();
       if (!channelName) {
-        showToast("Please enter a channel name.");
+        showToast("Please enter a channel name");
         return;
       }
 
       elements.loader.style.display = "block";
-      elements.resultList.innerHTML = "";
+      elements.searchText.style.display = "none";
       
       try {
         const response = await fetch(`${SEARCH_API_URL}${encodeURIComponent(channelName)}`);
@@ -954,9 +757,10 @@
         
         const data = await response.json();
         elements.loader.style.display = "none";
+        elements.searchText.style.display = "inline";
         
         if (!data.list?.length) {
-          showToast("Channel not found.");
+          showToast("Channel not found");
           return;
         }
 
@@ -964,18 +768,23 @@
       } catch (error) {
         console.error("Error fetching channel data:", error);
         elements.loader.style.display = "none";
-        showToast("Error fetching channel data. Please try again.");
+        elements.searchText.style.display = "inline";
+        showToast("Error fetching channel data");
       }
     }
     
     // Display channel search results
     function displayChannelResults(channels) {
-      elements.resultList.innerHTML = "";
+      elements.resultsGrid.innerHTML = "";
+      elements.resultsSection.style.display = "block";
       
       channels.forEach((channel) => {
         const channelElement = document.createElement("div");
-        channelElement.textContent = channel[0];
-        channelElement.classList.add("channel-result");
+        channelElement.className = "channel-card";
+        channelElement.innerHTML = `
+          <img src="${channel[3]}" alt="${channel[0]}" class="channel-avatar">
+          <div class="channel-name">${channel[0]}</div>
+        `;
         
         channelElement.onclick = () => {
           const newUrl = `${window.location.origin}/#${channel[2]}`;
@@ -984,10 +793,10 @@
           state.channelId = channel[2];
           resetCounter();
           startCounter();
-          elements.resultList.innerHTML = "";
+          elements.resultsSection.style.display = "none";
         };
         
-        elements.resultList.appendChild(channelElement);
+        elements.resultsGrid.appendChild(channelElement);
       });
     }
     
@@ -1002,8 +811,8 @@
           datasets: [{
             label: 'Subscribers',
             data: [],
-            borderColor: state.isLightTheme ? '#008080' : '#00fff0',
-            backgroundColor: state.isLightTheme ? 'rgba(0, 128, 128, 0.1)' : 'rgba(0, 255, 240, 0.1)',
+            borderColor: state.isDarkTheme ? '#FF6666' : '#FF0000',
+            backgroundColor: state.isDarkTheme ? 'rgba(255, 102, 102, 0.1)' : 'rgba(255, 0, 0, 0.1)',
             borderWidth: 3,
             tension: 0.1,
             pointRadius: 0,
@@ -1038,11 +847,11 @@
             y: {
               display: false,
               grid: {
-                color: state.isLightTheme ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+                color: state.isDarkTheme ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                 drawBorder: false
               },
               ticks: {
-                color: state.isLightTheme ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.6)',
+                color: state.isDarkTheme ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
                 callback: function(value) {
                   if (value >= 1000000) {
                     return (value / 1000000).toFixed(1) + 'M';
@@ -1138,7 +947,8 @@
         state.odometer = new Odometer({ 
           el: elements.subscriberCount, 
           value: count,
-          format: '(,ddd)'
+          format: '(,ddd)',
+          theme: 'minimal'
         });
       } else {
         state.odometer.update(count);
@@ -1147,78 +957,63 @@
     
     // Update subscriber change display
     function updateSubscriberChange(change) {
+      const changeElement = elements.subscriberChange;
+      
       if (change === 0) {
-        elements.subscriberChange.textContent = "→ No change";
-        elements.subscriberChange.style.color = state.isLightTheme ? "#666" : "#aaa";
+        changeElement.textContent = "→ No change";
+        changeElement.className = "subscriber-change change-neutral";
       } else if (change > 0) {
-        elements.subscriberChange.textContent = `↑ +${change.toLocaleString()}`;
-        elements.subscriberChange.style.color = "#00ff00";
+        changeElement.textContent = `↑ +${change.toLocaleString()}`;
+        changeElement.className = "subscriber-change change-positive";
       } else {
-        elements.subscriberChange.textContent = `↓ ${change.toLocaleString()}`;
-        elements.subscriberChange.style.color = "#ff0000";
+        changeElement.textContent = `↓ ${change.toLocaleString()}`;
+        changeElement.className = "subscriber-change change-negative";
       }
     }
     
     // Toggle chart visibility
     function toggleChart() {
-      if (elements.chartContainer.style.display === 'none' || elements.chartContainer.style.display === '') {
-        elements.chartContainer.style.display = 'block';
-        elements.toggleChartButton.textContent = 'Hide Subscriber History';
+      if (elements.chartSection.style.display === 'none' || elements.chartSection.style.display === '') {
+        elements.chartSection.style.display = 'block';
+        elements.toggleChartButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Hide Chart';
         
         if (!state.subscriberChart && state.historicalData.length > 0) {
           initializeChart();
           updateChart(state.historicalData[state.historicalData.length - 1].count);
         }
       } else {
-        elements.chartContainer.style.display = 'none';
-        elements.toggleChartButton.textContent = 'Show Subscriber History';
+        elements.chartSection.style.display = 'none';
+        elements.toggleChartButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Show Chart';
       }
     }
     
-    // Activate only count mode
-    function activateOnlyCount() {
-      document.getElementById('search-bar-container').style.display = "none";
-      elements.channelAvatar.style.display = "none";
-      elements.channelName.style.display = "none";
-      elements.shareButton.style.display = "none";
-      elements.subscriberChange.style.display = "none";
-
-      elements.subscriberCount.style.fontSize = "15em";
-      elements.counterContainer.style.alignItems = "flex-start";
-      elements.counterContainer.style.marginTop = "80px";
-      elements.counterContainer.style.justifyContent = "center";
-      elements.counterContainer.style.height = "100vh";
-
-      elements.onlyCountButton.style.display = "none";
+    // Activate minimal mode
+    function activateMinimalMode() {
+      document.querySelector('.search-section').style.display = "none";
+      document.querySelector('.counter-header').style.display = "none";
+      document.querySelector('.counter-footer').style.display = "none";
+      document.querySelector('.subscriber-change').style.display = "none";
       
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set('only-count', 'true');
-      window.history.pushState({}, '', currentUrl);
+      document.querySelector('.counter-display').style.margin = "100px 0";
+      document.querySelector('.subscriber-count').style.fontSize = "8rem";
       
-      showToast("Only count mode activated. Refresh to exit.", 2000);
+      showToast("Minimal mode activated. Refresh to exit.", 2000);
     }
     
-    // Toggle share options
-    function toggleShareOptions() {
-      elements.shareOptions.style.display = 
-        elements.shareOptions.style.display === "block" ? "none" : "block";
-    }
-    
-    // Share on Twitter
-    function shareOnTwitter() {
-      const channelName = elements.channelName.textContent || "YouTube channel";
-      const count = elements.subscriberCount.textContent || "0";
-      const text = `Check out ${channelName}'s subscriber count: ${count} on FastCount!`;
-      const url = window.location.href;
-      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
-      elements.shareOptions.style.display = "none";
-    }
-    
-    // Share on Facebook
-    function shareOnFacebook() {
-      const url = encodeURIComponent(window.location.href);
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
-      elements.shareOptions.style.display = "none";
+    // Share channel
+    function shareChannel() {
+      if (navigator.share) {
+        navigator.share({
+          title: `${elements.channelName.textContent} - YouTube Subscriber Count`,
+          text: `Check out ${elements.channelName.textContent}'s subscriber count on FastCount!`,
+          url: window.location.href
+        }).catch(err => {
+          console.log('Error sharing:', err);
+          copyLink();
+        });
+      } else {
+        copyLink();
+      }
     }
     
     // Copy link to clipboard
@@ -1226,269 +1021,49 @@
       const url = window.location.href;
       navigator.clipboard.writeText(url).then(() => {
         showToast("Link copied to clipboard!");
-        elements.shareOptions.style.display = "none";
       }).catch(err => {
         console.error('Failed to copy: ', err);
-        showToast("Failed to copy link. Please try again.");
+        showToast("Failed to copy link");
       });
     }
     
-    // Share as image (placeholder - would need html2canvas or similar library)
-    function shareAsImage() {
-      showToast("Image sharing coming soon!");
-      elements.shareOptions.style.display = "none";
-    }
-    
-    // Apply light theme
-    function applyLightTheme() {
-      elements.body.classList.add('light-theme');
-      if (state.subscriberChart) {
-        state.subscriberChart.data.datasets[0].borderColor = '#008080';
-        state.subscriberChart.data.datasets[0].backgroundColor = 'rgba(0, 128, 128, 0.1)';
-        state.subscriberChart.options.scales.y.ticks.color = 'rgba(0, 0, 0, 0.6)';
-        state.subscriberChart.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.1)';
-        state.subscriberChart.update();
+    // Toggle theme
+    function toggleTheme() {
+      state.isDarkTheme = !state.isDarkTheme;
+      localStorage.setItem('theme', state.isDarkTheme ? 'dark' : 'light');
+      
+      if (state.isDarkTheme) {
+        applyDarkTheme();
+      } else {
+        applyLightTheme();
       }
     }
     
     // Apply dark theme
     function applyDarkTheme() {
-      elements.body.classList.remove('light-theme');
+      elements.body.classList.add('dark-mode');
       if (state.subscriberChart) {
-        state.subscriberChart.data.datasets[0].borderColor = '#00fff0';
-        state.subscriberChart.data.datasets[0].backgroundColor = 'rgba(0, 255, 240, 0.1)';
-        state.subscriberChart.options.scales.y.ticks.color = 'rgba(255, 255, 255, 0.6)';
-        state.subscriberChart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+        state.subscriberChart.data.datasets[0].borderColor = '#FF6666';
+        state.subscriberChart.data.datasets[0].backgroundColor = 'rgba(255, 102, 102, 0.1)';
         state.subscriberChart.update();
       }
     }
     
-    // Toggle theme
-    function toggleTheme() {
-      state.isLightTheme = !state.isLightTheme;
-      localStorage.setItem('theme', state.isLightTheme ? 'light' : 'dark');
-      
-      if (state.isLightTheme) {
-        applyLightTheme();
-      } else {
-        applyDarkTheme();
+    // Apply light theme
+    function applyLightTheme() {
+      elements.body.classList.remove('dark-mode');
+      if (state.subscriberChart) {
+        state.subscriberChart.data.datasets[0].borderColor = '#FF0000';
+        state.subscriberChart.data.datasets[0].backgroundColor = 'rgba(255, 0, 0, 0.1)';
+        state.subscriberChart.update();
       }
     }
     
-    // Update visitor count (mock function)
-    function updateVisitorCount() {
-      // In a real implementation, this would fetch from an analytics API
-      console.log("Updating visitor count...");
-    }
-    
-    // --- Customization panel open/close logic ---
-    function openCustomizationPanel() {
-      document.getElementById('customization-panel').classList.add('open');
-      document.getElementById('customization-overlay').classList.add('visible');
-    }
-    function closeCustomizationPanel() {
-      document.getElementById('customization-panel').classList.remove('open');
-      document.getElementById('customization-overlay').classList.remove('visible');
-    }
-    document.getElementById('customization-btn').onclick = openCustomizationPanel;
-    document.getElementById('close-customization').onclick = closeCustomizationPanel;
-    document.getElementById('customization-overlay').onclick = closeCustomizationPanel;
-    
-    // Fonctionnalité du panneau Customization
-const customizationOptions = {
-  'Banner': {
-    selector: '#logo',
-    type: 'toggle',
-    default: true
-  },
-  'Avatar': {
-    selector: '#channel-avatar',
-    type: 'toggle',
-    default: true
-  },
-  'Platform Icon': {
-    selector: '#logo', // à adapter si autre icône
-    type: 'toggle',
-    default: true
-  },
-  'Name': {
-    selector: '#channel-name',
-    type: 'toggle',
-    default: true
-  },
-  'Username': {
-    selector: '#channel-name', // à adapter si username séparé
-    type: 'toggle',
-    default: true
-  },
-  'Count Name': {
-    selector: '#subscriber-count', // à adapter si label séparé
-    type: 'toggle',
-    default: true
-  },
-  'Count Icon': {
-    selector: '#subscriber-count', // à adapter si icône séparé
-    type: 'toggle',
-    default: true
-  },
-  'Progress': {
-    selector: '#progress-bar', // à adapter si existe
-    type: 'toggle',
-    default: true
-  },
-  'Side Counts': {
-    selector: '#side-counts', // à adapter si existe
-    type: 'toggle',
-    default: true
-  },
-  'Graph': {
-    selector: '#chart-container',
-    type: 'toggle',
-    default: true
-  },
-  'Averages': {
-    selector: '#averages', // à adapter si existe
-    type: 'toggle',
-    default: true
-  },
-  'Gains': {
-    selector: '#subscriber-change',
-    type: 'toggle',
-    default: true
-  }
-};
-
-function applyCustomizationFromStorage() {
-  // Switches
-  document.querySelectorAll('.customization-switches label').forEach(label => {
-    const name = label.textContent.trim();
-    const opt = customizationOptions[name];
-    if (!opt) return;
-    const checkbox = label.querySelector('input[type="checkbox"]');
-    const saved = localStorage.getItem('custom_' + name);
-    const checked = saved === null ? opt.default : saved === 'true';
-    checkbox.checked = checked;
-    const el = document.querySelector(opt.selector);
-    if (el) el.style.display = checked ? '' : 'none';
-    checkbox.addEventListener('change', () => {
-      localStorage.setItem('custom_' + name, checkbox.checked);
-      if (el) el.style.display = checkbox.checked ? '' : 'none';
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', () => {
+      init();
+      (adsbygoogle = window.adsbygoogle || []).push({});
     });
-  });
-  // Champs texte et couleur
-  const fields = [
-    {label: 'Text Font', selector: 'body', style: 'fontFamily', default: '"DM Sans Variable", "DM Sans", sans-serif'},
-    {label: 'Count Font', selector: '#subscriber-count', style: 'fontFamily', default: '"Roboto Variable", "Roboto", sans-serif'},
-    {label: 'Count Font Weight', selector: '#subscriber-count', style: 'fontWeight', default: '900'},
-    {label: 'Count Line Height', selector: '#subscriber-count', style: 'lineHeight', default: '1.2em'},
-    {label: 'Odometer Speed', selector: '#subscriber-count', style: 'odometerSpeed', default: '2.15'},
-    {label: 'Background Color', selector: 'body', style: 'background', default: '#171521', isColor: true},
-    {label: 'Card Color', selector: '.glass-card', style: 'background', default: '#252331', isColor: true},
-    {label: 'Count Color', selector: '#subscriber-count', style: 'color', default: '#ffffff', isColor: true},
-    {label: 'Graph Color', selector: '#subscriberChart', style: 'graphColor', default: '#ad91d5', isColor: true},
-    {label: 'Odometer Up Color', selector: '#subscriber-count', style: 'odometerUpColor', default: '#ffffff', isColor: true},
-    {label: 'Odometer Down Color', selector: '#subscriber-count', style: 'odometerDownColor', default: '#ffffff', isColor: true},
-    {label: 'Animate Odometer Color', selector: '#subscriber-count', style: 'animateOdometerColor', default: false, isCheckbox: true}
-  ];
-  document.querySelectorAll('.customization-fields label').forEach(label => {
-    const text = label.childNodes[0].textContent.trim();
-    const field = fields.find(f => f.label === text || (f.isCheckbox && label.textContent.includes(f.label)));
-    if (!field) return;
-    let input = label.querySelector('input');
-    if (!input) return;
-    // Valeur initiale
-    let saved = localStorage.getItem('custom_' + field.label);
-    if (field.isCheckbox) {
-      input.checked = saved === null ? field.default : saved === 'true';
-    } else {
-      input.value = saved === null ? field.default : saved;
-    }
-    // Application initiale
-    applyField(field, input.value, input.checked);
-    // Listener
-    input.addEventListener(field.isCheckbox ? 'change' : 'input', () => {
-      if (field.isCheckbox) {
-        localStorage.setItem('custom_' + field.label, input.checked);
-        applyField(field, null, input.checked);
-      } else {
-        localStorage.setItem('custom_' + field.label, input.value);
-        applyField(field, input.value);
-      }
-    });
-  });
-}
-function applyField(field, value, checked) {
-  if (field.isCheckbox) {
-    // Pour Animate Odometer Color, à implémenter selon la lib odometer
-    return;
-  }
-  if (field.style === 'odometerSpeed') {
-    window.odometerOptions = window.odometerOptions || {};
-    window.odometerOptions.duration = parseFloat(value) * 1000;
-    return;
-  }
-  if (field.style === 'graphColor') {
-    // Change la couleur du graph Chart.js
-    if (state.subscriberChart) {
-      state.subscriberChart.data.datasets[0].borderColor = value;
-      state.subscriberChart.update();
-    }
-    return;
-  }
-  if (field.style === 'odometerUpColor' || field.style === 'odometerDownColor') {
-    // À implémenter si odometer supporte
-    return;
-  }
-  const els = document.querySelectorAll(field.selector);
-  els.forEach(el => {
-    if (field.isColor) {
-      if (field.selector === 'body') {
-        el.style.background = value;
-      } else {
-        el.style[field.style] = value;
-      }
-    } else {
-      el.style[field.style] = value;
-    }
-  });
-}
-// Reset boutons
-function setupCustomizationReset() {
-  document.querySelectorAll('.customization-fields label').forEach(label => {
-    const btn = document.createElement('button');
-    btn.textContent = 'Reset';
-    btn.style.marginLeft = '8px';
-    btn.style.background = '#ad91d5';
-    btn.style.color = '#fff';
-    btn.style.border = 'none';
-    btn.style.borderRadius = '6px';
-    btn.style.padding = '2px 10px';
-    btn.style.cursor = 'pointer';
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      const input = label.querySelector('input');
-      const text = label.childNodes[0].textContent.trim();
-      const field = fields.find(f => f.label === text || (f.isCheckbox && label.textContent.includes(f.label)));
-      if (!field) return;
-      if (field.isCheckbox) {
-        input.checked = field.default;
-        localStorage.setItem('custom_' + field.label, field.default);
-        applyField(field, null, field.default);
-      } else {
-        input.value = field.default;
-        localStorage.setItem('custom_' + field.label, field.default);
-        applyField(field, field.default);
-      }
-    });
-    label.appendChild(btn);
-  });
-}
-document.addEventListener('DOMContentLoaded', () => {
-  init();
-  (adsbygoogle = window.adsbygoogle || []).push({});
-  applyCustomizationFromStorage();
-  setupCustomizationReset();
-});
   </script>
 </body>
 </html>
