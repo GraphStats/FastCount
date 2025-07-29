@@ -1015,6 +1015,31 @@
       }
     }
     
+    // Update subscriber count display
+    function updateSubscriberCount(count) {
+      if (!state.odometer) {
+        state.odometer = new Odometer({ 
+          el: elements.subscriberCount, 
+          value: count,
+          format: '(,ddd)',
+          theme: 'minimal'
+        });
+      } else {
+        state.odometer.update(count);
+      }
+    }
+
+    // Toggle theme function
+    function toggleTheme() {
+      state.isDarkTheme = !state.isDarkTheme;
+      localStorage.setItem('theme', state.isDarkTheme ? 'dark' : 'light');
+      if (state.isDarkTheme) {
+        applyDarkTheme();
+      } else {
+        applyLightTheme();
+      }
+    }
+    
     // FAVORITES SYSTEM
     const FAVORITES_KEY = 'favoriteChannels';
 
