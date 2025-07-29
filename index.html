@@ -1029,6 +1029,41 @@
       }
     }
 
+    // Update subscriber change display
+    function updateSubscriberChange(change) {
+      const changeElement = elements.subscriberChange;
+      if (change === 0) {
+        changeElement.textContent = "→ No change";
+        changeElement.className = "subscriber-change change-neutral";
+      } else if (change > 0) {
+        changeElement.textContent = `↑ +${change.toLocaleString()}`;
+        changeElement.className = "subscriber-change change-positive";
+      } else {
+        changeElement.textContent = `↓ ${change.toLocaleString()}`;
+        changeElement.className = "subscriber-change change-negative";
+      }
+    }
+
+    // Apply dark theme
+    function applyDarkTheme() {
+      elements.body.classList.add('dark-mode');
+      if (state.subscriberChart) {
+        state.subscriberChart.data.datasets[0].borderColor = '#FF6666';
+        state.subscriberChart.data.datasets[0].backgroundColor = 'rgba(255, 102, 102, 0.1)';
+        state.subscriberChart.update();
+      }
+    }
+
+    // Apply light theme
+    function applyLightTheme() {
+      elements.body.classList.remove('dark-mode');
+      if (state.subscriberChart) {
+        state.subscriberChart.data.datasets[0].borderColor = '#FF0000';
+        state.subscriberChart.data.datasets[0].backgroundColor = 'rgba(255, 0, 0, 0.1)';
+        state.subscriberChart.update();
+      }
+    }
+
     // Toggle theme function
     function toggleTheme() {
       state.isDarkTheme = !state.isDarkTheme;
