@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FastCount - YouTube Subscriber Counter</title>
+  <title>DockyCount - YouTube Subscriber Counter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -574,7 +574,7 @@
   <header>
     <div class="container header-content">
       <a href="/" class="logo">
-        <img src="https://fastcount-production.up.railway.app/logo.png" alt="FastCount Logo">
+        <img src="https://fastcount-production.up.railway.app/logo.png" alt="DockyCount Logo">
       </a>
       <div class="header-actions">
         <label class="theme-toggle">
@@ -673,7 +673,7 @@
 
   <footer>
     <div class="container">
-      <p>© 2025 FastCount - Real-time YouTube analytics</p>
+      <p>© 2025 DockyCount - Real-time YouTube analytics</p>
     </div>
   </footer>
 
@@ -782,7 +782,7 @@
       elements.chartSection.style.display = "none";
       elements.toggleChartButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Show Chart';
       state.historicalData = [];
-      document.title = "FastCount - YouTube Subscriber Counter";
+      document.title = "DockyCount - YouTube Subscriber Counter";
     }
     
     // Refresh counter manually
@@ -1204,7 +1204,7 @@
     function updateChannelInfo(channel) {
       elements.channelAvatar.src = channel.snippet.thumbnails.default.url;
       elements.channelName.textContent = channel.snippet.title;
-      document.title = `${channel.snippet.title} - FastCount`;
+      document.title = `${channel.snippet.title} - DockyCount`;
       updateFavoriteStar();
       renderFavoritesSidebar();
     }
