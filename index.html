@@ -1493,11 +1493,11 @@
         elements.compareSection.style.display = 'none';
         return;
       }
-
+      
       // Fetch fresh data for both channels
       fetchCompareData();
 
-      // Start auto-refresh
+      // Start auto-refresh interval
       if (state.compareIntervalId) {
         clearInterval(state.compareIntervalId);
       }
@@ -1612,6 +1612,12 @@
       
       // Fetch fresh data for both channels
       fetchCompareData();
+
+      // Start auto-refresh interval
+      if (state.compareIntervalId) {
+        clearInterval(state.compareIntervalId);
+      }
+      state.compareIntervalId = setInterval(fetchCompareData, 2000);
     }
 
     async function fetchCompareData() {
