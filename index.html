@@ -1443,35 +1443,16 @@
 
     // Fetch fresh data for comparison
     async function fetchCompareData() {
-      // Correction robuste : on ne prend que les channels dont l'id est défini et non vide
+      const API_BASE_URL = 'https://backend.mixerno.space/api/youtube/estv3/';
+      
+      // Correction robuste : on ne prend que les channels dont l'id est défini et non vide
       let channel1 = state.compareChannels[0];
       let channel2 = state.compareChannels[1];
 
-      // Si compareSearchState existe et a les channels, on les utilise (plus fiable)
-      if (
-        compareSearchState &&
-        compareSearchState.channel1 &&
-        compareSearchState.channel2 &&
-        typeof compareSearchState.channel1.id === "string" &&
-        typeof compareSearchState.channel2.id === "string" &&
-        compareSearchState.channel1.id !== "" &&
-        compareSearchState.channel2.id !== "" &&
-        compareSearchState.channel1.id !== "undefined" &&
-        compareSearchState.channel2.id !== "undefined"
-      ) {
-        channel1 = compareSearchState.channel1;
-        channel2 = compareSearchState.channel2;
-        state.compareChannels = [channel1, channel2];
-      }
-
-      // Vérifie que les deux channels existent et ont un id valide (non vide, non undefined, non null)
-      if (
-        !channel1 || !channel2 ||
-        typeof channel1.id !== "string" || typeof channel2.id !== "string" ||
-        !channel1.id || !channel2.id ||
-        channel1.id === "undefined" || channel2.id === "undefined"
-      ) {
-        showToast("Need 2 channels to compare");
+      // Vérifie que les deux channels existent et ont un id valide
+      if (!channel1?.id || !channel2?.id || 
+          channel1.id === 'undefined' || channel2.id === 'undefined') {
+        showToast("Invalid channel IDs for comparison");
         elements.compareSection.style.display = 'none';
         return;
       }
@@ -1481,25 +1462,34 @@
         elements.compareChannelsContainer.innerHTML = '<div style="text-align:center;padding:20px;">Loading comparison data...</div>';
         elements.compareSection.style.display = 'block';
 
-        // Fetch data for both channels
-        const responses = await Promise.all([
-          fetch(`${API_BASE_URL}${channel1.id}`),
-          fetch(`${API_BASE_URL}${channel2.id}`)
+        // Log des URLs pour debug
+        console.log('Fetching:', API_BASE_URL + channel1.id);
+        console.log('Fetching:', API_BASE_URL + channel2.id);
+
+        // Fetch data for both channels avec l'URL complète
+        const [response1, response2] = await Promise.all([
+          fetch(API_BASE_URL + channel1.id),
+          fetch(API_BASE_URL + channel2.id)
         ]);
 
-        const data1 = await responses[0].json();
-        const data2 = await responses[1].json();
+        if (!response1.ok || !response2.ok) {
+          throw new Error("One or both API requests failed");
+        }
 
-        if (!data1.items?.length || !data2.items?.length) {
-          throw new Error("Could not fetch data for one or both channels");
+        const data1 = await response1.json();
+        const data2 = await response2.json();
+
+        // Vérifie que les données sont valides
+        if (!data1.items?.[0] || !data2.items?.[0]) {
+          throw new Error("Invalid data received from API");
         }
 
         const channel1Data = data1.items[0];
         const channel2Data = data2.items[0];
 
         // Update counts
-        channel1.count = channel1Data.statistics.subscriberCount;
-        channel2.count = channel2Data.statistics.subscriberCount;
+        channel1.count = parseInt(channel1Data.statistics.subscriberCount) || 0;
+        channel2.count = parseInt(channel2Data.statistics.subscriberCount) || 0;
 
         // Render comparison
         renderCompare(channel1, channel2);
@@ -1510,8 +1500,12 @@
       }
     }
 
-    // Render the comparison UI
     function renderCompare(channel1, channel2) {
+      if (!channel1?.count || !channel2?.count) {
+        showToast("Invalid comparison data");
+        return;
+      }
+
       const difference = channel1.count - channel2.count;
       let differenceClass = "difference-neutral";
       let differenceText = "Equal subscribers";
