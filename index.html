@@ -1676,6 +1676,16 @@
         elements.compareSection.style.display = 'none';
       }
     }
+
+    // Add after the fetchCompareData function
+    function refreshCompare() {
+      if (state.compareChannels && state.compareChannels.length === 2) {
+        fetchCompareData();
+        showToast("Comparison refreshed", 2000);
+      } else {
+        showToast("No channels to compare");
+      }
+    }
   </script>
 </body>
 </html>
