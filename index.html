@@ -1529,6 +1529,19 @@
         showToast("No channels to compare");
       }
     }
+
+    function showCompareSearchBar() {
+      document.getElementById('compare-search-section').style.display = 'block';
+      document.getElementById('main-search-section').style.display = 'none';
+      document.getElementById('results-section').style.display = 'none';
+      compareSearchState = { channel1: null, channel2: null };
+      document.getElementById('compare-input-1').value = '';
+      document.getElementById('compare-input-2').value = '';
+      document.getElementById('compare-results-1').innerHTML = '';
+      document.getElementById('compare-results-2').innerHTML = '';
+      closeCompare();
+    }
+    window.showCompareSearchBar = showCompareSearchBar;
   </script>
 </body>
 </html>
