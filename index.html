@@ -1578,33 +1578,33 @@
           document.getElementById(resultsId).innerHTML = '<div style="color:var(--danger);padding:8px;">Channel not found</div>';
           return;
         }
-        // Affiche les résultats
+        // Display results
         document.getElementById(resultsId).innerHTML = '';
         data.list.forEach(channel => {
+          const [channelName, channelAvatar, channelId] = channel; // Destructure array correctly
           const el = document.createElement('div');
           el.className = 'channel-card';
           el.style.marginBottom = '8px';
           el.innerHTML = `
-            <img src="${channel[3]}" alt="${channel[0]}" class="channel-avatar">
-            <div class="channel-name">${channel[0]}</div>
+            <img src="${channelAvatar}" alt="${channelName}" class="channel-avatar">
+            <div class="channel-name">${channelName}</div>
           `;
           el.onclick = () => {
             const channelInfo = {
-              id: channel[2].toString(), // Assure que l'ID est une chaîne
-              name: channel[0],
-              avatar: channel[3]
+              id: channelId,
+              name: channelName,
+              avatar: channelAvatar
             };
             
             if (idx === 1) {
               compareSearchState.channel1 = channelInfo;
-              document.getElementById('compare-results-1').innerHTML = `<div style="padding:8px;color:var(--success);">Selected: ${channel[0]}</div>`;
+              document.getElementById('compare-results-1').innerHTML = `<div style="padding:8px;color:var(--success);">Selected: ${channelName}</div>`;
             } else {
               compareSearchState.channel2 = channelInfo;
-              document.getElementById('compare-results-2').innerHTML = `<div style="padding:8px;color:var(--success);">Selected: ${channel[0]}</div>`;
+              document.getElementById('compare-results-2').innerHTML = `<div style="padding:8px;color:var(--success);">Selected: ${channelName}</div>`;
             }
             
-            // Vérification plus stricte avant de lancer la comparaison
-            if (compareSearchState.channel1?.id && compareSearchState.channel2?.id) {
+            if (compareSearchState.channel1 && compareSearchState.channel2) {
               hideCompareSearchBar();
               state.compareChannels = [compareSearchState.channel1, compareSearchState.channel2];
               showCompare();
@@ -1613,18 +1613,61 @@
           document.getElementById(resultsId).appendChild(el);
         });
       } catch (e) {
+        console.error(e);
         document.getElementById(resultsId).innerHTML = '<div style="color:var(--danger);padding:8px;">Error fetching channel data</div>';
       }
     }
 
-    // Expose functions for HTML event handlers
-    window.handleKeyPress = handleKeyPress;
-    window.fetchChannelData = fetchChannelData;
-    // Expose new compare search functions
-    window.showCompareSearchBar = showCompareSearchBar;
-    window.hideCompareSearchBar = hideCompareSearchBar;
-    window.fetchCompareSearch = fetchCompareSearch;
+    function showCompare() {
+      if (!state.compareChannels || state.compareChannels.length !== 2) {
+        showToast("Need 2 channels to compare");
+        elements.compareSection.style.display = 'none';
+        return;
+      }
+      
+      // Fetch fresh data for both channels
+      fetchCompareData();
+    }
 
+    async function fetchCompareData() {
+      try {
+        const [channel1, channel2] = state.compareChannels;
+        
+        // Show loading state
+        elements.compareChannelsContainer.innerHTML = '<div style="text-align:center;padding:20px;">Loading comparison data...</div>';
+        elements.compareSection.style.display = 'block';
+
+        const [response1, response2] = await Promise.all([
+          fetch(`${API_BASE_URL}${channel1.id}`),
+          fetch(`${API_BASE_URL}${channel2.id}`)
+        ]);
+
+        if (!response1.ok || !response2.ok) {
+          throw new Error("One or both API requests failed");
+        }
+
+        const data1 = await response1.json();
+        const data2 = await response2.json();
+
+        if (!data1.items?.[0] || !data2.items?.[0]) {
+          throw new Error("Invalid data received from API");
+        }
+
+        const channel1Data = data1.items[0];
+        const channel2Data = data2.items[0];
+
+        // Update counts
+        channel1.count = parseInt(channel1Data.statistics.subscriberCount) || 0;
+        channel2.count = parseInt(channel2Data.statistics.subscriberCount) || 0;
+
+        // Render comparison
+        renderCompare(channel1, channel2);
+      } catch (error) {
+        console.error("Error fetching comparison data:", error);
+        showToast("Error fetching comparison data");
+        elements.compareSection.style.display = 'none';
+      }
+    }
   </script>
 </body>
 </html>
