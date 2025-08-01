@@ -549,6 +549,92 @@
     transform: scale(0.95);
   }
 
+  /* Compare Section */
+  .compare-section {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 32px;
+    display: none;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .compare-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .compare-channels {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .compare-channel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .compare-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary);
+  }
+
+  .compare-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .compare-count {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+
+  .compare-difference {
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .difference-positive {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+
+  .difference-negative {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+
+  .difference-neutral {
+    background-color: rgba(156, 163, 175, 0.1);
+    color: var(--text-light);
+  }
+
+  .compare-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
   /* Responsive: hide sidebar on mobile */
   @media (max-width: 900px) {
     .sidebar-favorites {
@@ -557,13 +643,15 @@
     main.container {
       margin-left: 0 !important;
     }
+    .compare-channels {
+      flex-direction: column;
+    }
   }
   @media (min-width: 900px) {
     main.container {
       margin-left: 260px;
     }
   }
-  /* ...existing code... */
 </style>
 <body>
   <!-- Sidebar Favorites -->
@@ -591,13 +679,41 @@
       <p>Track real-time subscriber counts and growth analytics for any YouTube channel</p>
     </section>
 
-    <section class="search-section fade-in">
+    <section class="search-section fade-in" id="main-search-section">
       <div class="search-container">
         <input type="text" class="search-input" id="channel-input" placeholder="Enter YouTube channel name or URL" onkeypress="handleKeyPress(event)">
         <button class="search-btn" onclick="fetchChannelData()">
           <span id="search-text">Search</span>
           <div class="loader" id="loader"></div>
         </button>
+        <!-- Nouveau bouton Compare -->
+        <button class="search-btn" id="show-compare-search-btn" onclick="showCompareSearchBar()" style="margin-left:8px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15l-6-6-6 6"></path><path d="M21 9l-6 6-6-6"></path></svg>
+          Compare
+        </button>
+      </div>
+    </section>
+
+    <!-- Barre de recherche pour la comparaison (cachée par défaut) -->
+    <section class="search-section fade-in" id="compare-search-section" style="display:none;">
+      <div class="search-container" style="flex-direction:column;gap:18px;">
+        <div style="display:flex;gap:12px;">
+          <input type="text" class="search-input" id="compare-input-1" placeholder="First channel name or URL">
+          <button class="search-btn" onclick="fetchCompareSearch(1)">
+            <span>Search</span>
+          </button>
+        </div>
+        <div id="compare-results-1" style="width:100%;"></div>
+        <div style="display:flex;gap:12px;">
+          <input type="text" class="search-input" id="compare-input-2" placeholder="Second channel name or URL">
+          <button class="search-btn" onclick="fetchCompareSearch(2)">
+            <span>Search</span>
+          </button>
+        </div>
+        <div id="compare-results-2" style="width:100%;"></div>
+        <div style="display:flex;gap:12px;justify-content:flex-end;">
+          <button class="action-btn" onclick="hideCompareSearchBar()">Cancel</button>
+        </div>
       </div>
     </section>
 
@@ -635,6 +751,13 @@
             </svg>
             Show Chart
           </button>
+          <button class="action-btn" onclick="addToCompare()" id="compare-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15l-6-6-6 6"></path>
+              <path d="M21 9l-6 6-6-6"></path>
+            </svg>
+            Compare
+          </button>
         </div>
       </div>
 
@@ -669,6 +792,33 @@
         <canvas id="subscriberChart"></canvas>
       </div>
     </section>
+
+    <!-- New Compare Section -->
+    <section class="compare-section" id="compare-section">
+      <div class="compare-header">
+        <h3>Channel Comparison</h3>
+        <button class="action-btn" onclick="closeCompare()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Close
+        </button>
+      </div>
+      <div class="compare-channels" id="compare-channels">
+        <!-- Will be filled dynamically -->
+      </div>
+      <div class="compare-actions">
+        <button class="action-btn" onclick="refreshCompare()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          Refresh
+        </button>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -694,7 +844,8 @@
       subscriberChart: null,
       historicalData: [],
       lastSubscriberCount: 0,
-      isDarkTheme: localStorage.getItem('theme') === 'dark'
+      isDarkTheme: localStorage.getItem('theme') === 'dark',
+      compareChannels: [] // Array to store channels to compare
     };
     
     // DOM elements cache
@@ -713,7 +864,9 @@
       chartSection: document.getElementById("chart-section"),
       toast: document.getElementById("toast"),
       themeSwitch: document.getElementById("theme-switch"),
-      body: document.body
+      body: document.body,
+      compareSection: document.getElementById("compare-section"),
+      compareChannelsContainer: document.getElementById("compare-channels")
     };
     
     // Initialize the application
@@ -985,7 +1138,7 @@
     // Fetch stats data for the current channel
     async function fetchStatsData() {
       try {
-        const response = await fetch(`${API_BASE_URL}${state.channelId}`);
+        const response = await fetch(`${API_BASE_URL}${state.channelId}`); // <-- corrigé ici
         
         if (response.ok) {
           const data = await response.json();
@@ -1034,13 +1187,13 @@
     function updateSubscriberChange(change) {
       const changeElement = elements.subscriberChange;
       if (change === 0) {
-        changeElement.textContent = "→ No change";
+        changeElement.innerHTML = "&rarr; No change";
         changeElement.className = "subscriber-change change-neutral";
       } else if (change > 0) {
-        changeElement.textContent = `↑ +${change.toLocaleString()}`;
+        changeElement.innerHTML = `&uarr; +${change.toLocaleString()}`;
         changeElement.className = "subscriber-change change-positive";
       } else {
-        changeElement.textContent = `↓ ${change.toLocaleString()}`;
+        changeElement.innerHTML = `&darr; ${change.toLocaleString()}`;
         changeElement.className = "subscriber-change change-negative";
       }
     }
@@ -1231,6 +1384,254 @@
         elements.toggleChartButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Show Chart';
       }
     }
+
+    // COMPARE FUNCTIONALITY
+    // Add current channel to compare list
+    function addToCompare() {
+      if (!state.channelId || !elements.channelName.textContent) {
+        showToast("No channel selected to compare");
+        return;
+      }
+
+      const channelInfo = {
+        id: state.channelId,
+        name: elements.channelName.textContent,
+        avatar: elements.channelAvatar.src,
+        count: state.lastSubscriberCount
+      };
+
+      // Check if channel is already in compare list
+      if (state.compareChannels.some(c => c.id === channelInfo.id)) {
+        showToast("Channel already in comparison");
+        return;
+      }
+
+      // Add to compare list
+      state.compareChannels.push(channelInfo);
+      showToast("Channel added to comparison");
+
+      // If we have 2 channels, show the comparison
+      if (state.compareChannels.length === 2) {
+        showCompare();
+      }
+    }
+
+    // Close the comparison view
+    function closeCompare() {
+      elements.compareSection.style.display = 'none';
+      state.compareChannels = [];
+    }
+
+    // Show comparison between two channels
+    function showCompare() {
+      // Vérifie que les deux channels existent et ont un id
+      if (
+        !state.compareChannels ||
+        state.compareChannels.length < 2 ||
+        !state.compareChannels[0] ||
+        !state.compareChannels[1] ||
+        !state.compareChannels[0].id ||
+        !state.compareChannels[1].id
+      ) {
+        showToast("Need 2 channels to compare");
+        elements.compareSection.style.display = 'none';
+        return;
+      }
+      // Fetch fresh data for both channels
+      fetchCompareData();
+    }
+
+    // Fetch fresh data for comparison
+    async function fetchCompareData() {
+      // Correction robuste : on ne prend que les channels dont l'id est défini et non vide
+      let channel1 = state.compareChannels[0];
+      let channel2 = state.compareChannels[1];
+
+      // Si compareSearchState existe et a les channels, on les utilise (plus fiable)
+      if (
+        compareSearchState &&
+        compareSearchState.channel1 &&
+        compareSearchState.channel2 &&
+        typeof compareSearchState.channel1.id === "string" &&
+        typeof compareSearchState.channel2.id === "string" &&
+        compareSearchState.channel1.id !== "" &&
+        compareSearchState.channel2.id !== "" &&
+        compareSearchState.channel1.id !== "undefined" &&
+        compareSearchState.channel2.id !== "undefined"
+      ) {
+        channel1 = compareSearchState.channel1;
+        channel2 = compareSearchState.channel2;
+        state.compareChannels = [channel1, channel2];
+      }
+
+      // Vérifie que les deux channels existent et ont un id valide (non vide, non undefined, non null)
+      if (
+        !channel1 || !channel2 ||
+        typeof channel1.id !== "string" || typeof channel2.id !== "string" ||
+        !channel1.id || !channel2.id ||
+        channel1.id === "undefined" || channel2.id === "undefined"
+      ) {
+        showToast("Need 2 channels to compare");
+        elements.compareSection.style.display = 'none';
+        return;
+      }
+
+      try {
+        // Show loading state
+        elements.compareChannelsContainer.innerHTML = '<div style="text-align:center;padding:20px;">Loading comparison data...</div>';
+        elements.compareSection.style.display = 'block';
+
+        // Fetch data for both channels
+        const responses = await Promise.all([
+          fetch(`${API_BASE_URL}${channel1.id}`),
+          fetch(`${API_BASE_URL}${channel2.id}`)
+        ]);
+
+        const data1 = await responses[0].json();
+        const data2 = await responses[1].json();
+
+        if (!data1.items?.length || !data2.items?.length) {
+          throw new Error("Could not fetch data for one or both channels");
+        }
+
+        const channel1Data = data1.items[0];
+        const channel2Data = data2.items[0];
+
+        // Update counts
+        channel1.count = channel1Data.statistics.subscriberCount;
+        channel2.count = channel2Data.statistics.subscriberCount;
+
+        // Render comparison
+        renderCompare(channel1, channel2);
+      } catch (error) {
+        console.error("Error fetching comparison data:", error);
+        showToast("Error fetching comparison data");
+        elements.compareSection.style.display = 'none';
+      }
+    }
+
+    // Render the comparison UI
+    function renderCompare(channel1, channel2) {
+      const difference = channel1.count - channel2.count;
+      let differenceClass = "difference-neutral";
+      let differenceText = "Equal subscribers";
+
+      if (difference > 0) {
+        differenceClass = "difference-positive";
+        differenceText = `${Math.abs(difference).toLocaleString()} more than ${channel2.name}`;
+      } else if (difference < 0) {
+        differenceClass = "difference-negative";
+        differenceText = `${Math.abs(difference).toLocaleString()} less than ${channel2.name}`;
+      }
+
+      elements.compareChannelsContainer.innerHTML = `
+        <div class="compare-channel">
+          <img src="${channel1.avatar}" alt="${channel1.name}" class="compare-avatar">
+          <div class="compare-name">${channel1.name}</div>
+          <div class="compare-count">${channel1.count.toLocaleString()}</div>
+        </div>
+        <div class="compare-channel">
+          <img src="${channel2.avatar}" alt="${channel2.name}" class="compare-avatar">
+          <div class="compare-name">${channel2.name}</div>
+          <div class="compare-count">${channel2.count.toLocaleString()}</div>
+        </div>
+        <div class="compare-difference ${differenceClass}">
+          ${channel1.name} has ${differenceText}
+        </div>
+      `;
+    }
+
+    // --- Compare Search Bar Logic ---
+    let compareSearchState = {
+      channel1: null,
+      channel2: null
+    };
+
+    function showCompareSearchBar() {
+      document.getElementById('compare-search-section').style.display = 'block';
+      document.getElementById('main-search-section').style.display = 'none';
+      document.getElementById('results-section').style.display = 'none';
+      compareSearchState = { channel1: null, channel2: null };
+      document.getElementById('compare-input-1').value = '';
+      document.getElementById('compare-input-2').value = '';
+      document.getElementById('compare-results-1').innerHTML = '';
+      document.getElementById('compare-results-2').innerHTML = '';
+      closeCompare();
+    }
+
+    function hideCompareSearchBar() {
+      document.getElementById('compare-search-section').style.display = 'none';
+      document.getElementById('main-search-section').style.display = '';
+      compareSearchState = { channel1: null, channel2: null };
+      document.getElementById('compare-results-1').innerHTML = '';
+      document.getElementById('compare-results-2').innerHTML = '';
+    }
+
+    async function fetchCompareSearch(idx) {
+      const inputId = idx === 1 ? 'compare-input-1' : 'compare-input-2';
+      const resultsId = idx === 1 ? 'compare-results-1' : 'compare-results-2';
+      const query = document.getElementById(inputId).value.trim();
+      if (!query) {
+        document.getElementById(resultsId).innerHTML = '<div style="color:var(--danger);padding:8px;">Please enter a channel name</div>';
+        return;
+      }
+      document.getElementById(resultsId).innerHTML = '<div style="padding:8px;">Searching...</div>';
+      try {
+        const response = await fetch(`${SEARCH_API_URL}${encodeURIComponent(query)}`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        if (!data.list?.length) {
+          document.getElementById(resultsId).innerHTML = '<div style="color:var(--danger);padding:8px;">Channel not found</div>';
+          return;
+        }
+        // Affiche les résultats
+        document.getElementById(resultsId).innerHTML = '';
+        data.list.forEach(channel => {
+          const el = document.createElement('div');
+          el.className = 'channel-card';
+          el.style.marginBottom = '8px';
+          el.innerHTML = `
+            <img src="${channel[3]}" alt="${channel[0]}" class="channel-avatar">
+            <div class="channel-name">${channel[0]}</div>
+          `;
+          el.onclick = () => {
+            if (idx === 1) {
+              compareSearchState.channel1 = {
+                id: channel[2],
+                name: channel[0],
+                avatar: channel[3]
+              };
+              document.getElementById('compare-results-1').innerHTML = `<div style="padding:8px;color:var(--success);">Selected: ${channel[0]}</div>`;
+            } else {
+              compareSearchState.channel2 = {
+                id: channel[2],
+                name: channel[0],
+                avatar: channel[3]
+              };
+              document.getElementById('compare-results-2').innerHTML = `<div style="padding:8px;color:var(--success);">Selected: ${channel[0]}</div>`;
+            }
+            // Si les deux sont sélectionnés, lance la comparaison
+            if (compareSearchState.channel1 && compareSearchState.channel2) {
+              hideCompareSearchBar();
+              state.compareChannels = [compareSearchState.channel1, compareSearchState.channel2];
+              showCompare();
+            }
+          };
+          document.getElementById(resultsId).appendChild(el);
+        });
+      } catch (e) {
+        document.getElementById(resultsId).innerHTML = '<div style="color:var(--danger);padding:8px;">Error fetching channel data</div>';
+      }
+    }
+
+    // Expose functions for HTML event handlers
+    window.handleKeyPress = handleKeyPress;
+    window.fetchChannelData = fetchChannelData;
+    // Expose new compare search functions
+    window.showCompareSearchBar = showCompareSearchBar;
+    window.hideCompareSearchBar = hideCompareSearchBar;
+    window.fetchCompareSearch = fetchCompareSearch;
+
   </script>
 </body>
 </html>
