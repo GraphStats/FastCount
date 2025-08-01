@@ -1422,84 +1422,7 @@
       state.compareChannels = [];
     }
 
-    // Show comparison between two channels
-    function showCompare() {
-      // Vérifie que les deux channels existent et ont un id
-      if (
-        !state.compareChannels ||
-        state.compareChannels.length < 2 ||
-        !state.compareChannels[0] ||
-        !state.compareChannels[1] ||
-        !state.compareChannels[0].id ||
-        !state.compareChannels[1].id
-      ) {
-        showToast("Need 2 channels to compare");
-        elements.compareSection.style.display = 'none';
-        return;
-      }
-      // Fetch fresh data for both channels
-      fetchCompareData();
-    }
-
-    // Fetch fresh data for comparison
-    async function fetchCompareData() {
-      const API_BASE_URL = 'https://backend.mixerno.space/api/youtube/estv3/';
-      
-      // Correction robuste : on ne prend que les channels dont l'id est défini et non vide
-      let channel1 = state.compareChannels[0];
-      let channel2 = state.compareChannels[1];
-
-      // Vérifie que les deux channels existent et ont un id valide
-      if (!channel1?.id || !channel2?.id || 
-          channel1.id === 'undefined' || channel2.id === 'undefined') {
-        showToast("Invalid channel IDs for comparison");
-        elements.compareSection.style.display = 'none';
-        return;
-      }
-
-      try {
-        // Show loading state
-        elements.compareChannelsContainer.innerHTML = '<div style="text-align:center;padding:20px;">Loading comparison data...</div>';
-        elements.compareSection.style.display = 'block';
-
-        // Construire les URLs complètes avec l'URL de base
-        const url1 = new URL(channel1.id, API_BASE_URL).toString();
-        const url2 = new URL(channel2.id, API_BASE_URL).toString();
-
-        // Fetch data for both channels avec les URLs correctes
-        const [response1, response2] = await Promise.all([
-          fetch(url1),
-          fetch(url2)
-        ]);
-
-        if (!response1.ok || !response2.ok) {
-          throw new Error("One or both API requests failed");
-        }
-
-        const data1 = await response1.json();
-        const data2 = await response2.json();
-
-        // Vérifie que les données sont valides
-        if (!data1.items?.[0] || !data2.items?.[0]) {
-          throw new Error("Invalid data received from API");
-        }
-
-        const channel1Data = data1.items[0];
-        const channel2Data = data2.items[0];
-
-        // Update counts
-        channel1.count = parseInt(channel1Data.statistics.subscriberCount) || 0;
-        channel2.count = parseInt(channel2Data.statistics.subscriberCount) || 0;
-
-        // Render comparison
-        renderCompare(channel1, channel2);
-      } catch (error) {
-        console.error("Error fetching comparison data:", error);
-        showToast("Error fetching comparison data");
-        elements.compareSection.style.display = 'none';
-      }
-    }
-
+    // Render comparison between channels
     function renderCompare(channel1, channel2) {
       if (!channel1?.count || !channel2?.count) {
         showToast("Invalid comparison data");
@@ -1518,21 +1441,78 @@
         differenceText = `${Math.abs(difference).toLocaleString()} less than ${channel2.name}`;
       }
 
-      elements.compareChannelsContainer.innerHTML = `
-        <div class="compare-channel">
-          <img src="${channel1.avatar}" alt="${channel1.name}" class="compare-avatar">
-          <div class="compare-name">${channel1.name}</div>
-          <div class="compare-count">${channel1.count.toLocaleString()}</div>
-        </div>
-        <div class="compare-channel">
-          <img src="${channel2.avatar}" alt="${channel2.name}" class="compare-avatar">
-          <div class="compare-name">${channel2.name}</div>
-          <div class="compare-count">${channel2.count.toLocaleString()}</div>
-        </div>
-        <div class="compare-difference ${differenceClass}">
-          ${channel1.name} has ${differenceText}
-        </div>
-      `;
+      // First render if odometerElements don't exist
+      if (!state.odometerElements) {
+        elements.compareChannelsContainer.innerHTML = `
+          <div class="compare-channel">
+            <img src="${channel1.avatar}" alt="${channel1.name}" class="compare-avatar">
+            <div class="compare-name">${channel1.name}</div>
+            <div id="compare-count-1" class="compare-count">0</div>
+          </div>
+          <div class="compare-channel">
+            <img src="${channel2.avatar}" alt="${channel2.name}" class="compare-avatar">
+            <div class="compare-name">${channel2.name}</div>
+            <div id="compare-count-2" class="compare-count">0</div>
+          </div>
+          <div class="compare-difference ${differenceClass}">
+            ${channel1.name} has ${differenceText}
+          </div>
+        `;
+
+        // Initialize odometer elements
+        state.odometerElements = {
+          count1: new Odometer({
+            el: document.getElementById('compare-count-1'),
+            value: 0,
+            format: '(,ddd)',
+            theme: 'minimal'
+          }),
+          count2: new Odometer({
+            el: document.getElementById('compare-count-2'),
+            value: 0,
+            format: '(,ddd)',
+            theme: 'minimal'
+          })
+        };
+      }
+
+      // Update odometer values
+      state.odometerElements.count1.update(channel1.count);
+      state.odometerElements.count2.update(channel2.count);
+
+      // Update difference text
+      const differenceElement = elements.compareChannelsContainer.querySelector('.compare-difference');
+      differenceElement.className = `compare-difference ${differenceClass}`;
+      differenceElement.textContent = `${channel1.name} has ${differenceText}`;
+    }
+
+    // Show comparison and start auto-refresh
+    function showCompare() {
+      if (!state.compareChannels || state.compareChannels.length !== 2) {
+        showToast("Need 2 channels to compare");
+        elements.compareSection.style.display = 'none';
+        return;
+      }
+
+      // Fetch fresh data for both channels
+      fetchCompareData();
+
+      // Start auto-refresh
+      if (state.compareIntervalId) {
+        clearInterval(state.compareIntervalId);
+      }
+      state.compareIntervalId = setInterval(fetchCompareData, 2000);
+    }
+
+    // Close comparison and clear interval
+    function closeCompare() {
+      elements.compareSection.style.display = 'none';
+      state.compareChannels = [];
+      if (state.compareIntervalId) {
+        clearInterval(state.compareIntervalId);
+        state.compareIntervalId = null;
+      }
+      state.odometerElements = null;
     }
 
     // --- Compare Search Bar Logic ---
