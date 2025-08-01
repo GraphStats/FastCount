@@ -1441,183 +1441,38 @@
         differenceText = `${Math.abs(difference).toLocaleString()} less than ${channel2.name}`;
       }
 
-      // First render if odometerElements don't exist
-      if (!state.odometerElements) {
-        elements.compareChannelsContainer.innerHTML = `
-          <div class="compare-channel">
-            <img src="${channel1.avatar}" alt="${channel1.name}" class="compare-avatar">
-            <div class="compare-name">${channel1.name}</div>
-            <div id="compare-count-1" class="compare-count">0</div>
-          </div>
-          <div class="compare-channel">
-            <img src="${channel2.avatar}" alt="${channel2.name}" class="compare-avatar">
-            <div class="compare-name">${channel2.name}</div>
-            <div id="compare-count-2" class="compare-count">0</div>
-          </div>
-          <div class="compare-difference ${differenceClass}">
-            ${channel1.name} has ${differenceText}
-          </div>
-        `;
+      // Toujours recréer le contenu HTML
+      elements.compareChannelsContainer.innerHTML = `
+        <div class="compare-channel">
+          <img src="${channel1.avatar}" alt="${channel1.name}" class="compare-avatar">
+          <div class="compare-name">${channel1.name}</div>
+          <div id="compare-count-1" class="compare-count">0</div>
+        </div>
+        <div class="compare-channel">
+          <img src="${channel2.avatar}" alt="${channel2.name}" class="compare-avatar">
+          <div class="compare-name">${channel2.name}</div>
+          <div id="compare-count-2" class="compare-count">0</div>
+        </div>
+        <div class="compare-difference ${differenceClass}">
+          ${channel1.name} has ${differenceText}
+        </div>
+      `;
 
-        // Initialize odometer elements
-        state.odometerElements = {
-          count1: new Odometer({
-            el: document.getElementById('compare-count-1'),
-            value: 0,
-            format: '(,ddd)',
-            theme: 'minimal'
-          }),
-          count2: new Odometer({
-            el: document.getElementById('compare-count-2'),
-            value: 0,
-            format: '(,ddd)',
-            theme: 'minimal'
-          })
-        };
-      }
-
-      // Update odometer values
-      state.odometerElements.count1.update(channel1.count);
-      state.odometerElements.count2.update(channel2.count);
-
-      // Update difference text
-      const differenceElement = elements.compareChannelsContainer.querySelector('.compare-difference');
-      differenceElement.className = `compare-difference ${differenceClass}`;
-      differenceElement.textContent = `${channel1.name} has ${differenceText}`;
-    }
-
-    // Show comparison and start auto-refresh
-    function showCompare() {
-      if (!state.compareChannels || state.compareChannels.length !== 2) {
-        showToast("Need 2 channels to compare");
-        elements.compareSection.style.display = 'none';
-        return;
-      }
-      
-      // Fetch fresh data for both channels
-      fetchCompareData();
-
-      // Start auto-refresh interval
-      if (state.compareIntervalId) {
-        clearInterval(state.compareIntervalId);
-      }
-      state.compareIntervalId = setInterval(fetchCompareData, 2000);
-    }
-
-    // Close comparison and clear interval
-    function closeCompare() {
-      elements.compareSection.style.display = 'none';
-      state.compareChannels = [];
-      if (state.compareIntervalId) {
-        clearInterval(state.compareIntervalId);
-        state.compareIntervalId = null;
-      }
-      state.odometerElements = null;
-    }
-
-    // --- Compare Search Bar Logic ---
-    let compareSearchState = {
-      channel1: null,
-      channel2: null
-    };
-
-    function showCompareSearchBar() {
-      document.getElementById('compare-search-section').style.display = 'block';
-      document.getElementById('main-search-section').style.display = 'none';
-      document.getElementById('results-section').style.display = 'none';
-      compareSearchState = { channel1: null, channel2: null };
-      document.getElementById('compare-input-1').value = '';
-      document.getElementById('compare-input-2').value = '';
-      document.getElementById('compare-results-1').innerHTML = '';
-      document.getElementById('compare-results-2').innerHTML = '';
-      closeCompare();
-    }
-
-    function hideCompareSearchBar() {
-      document.getElementById('compare-search-section').style.display = 'none';
-      document.getElementById('main-search-section').style.display = '';
-      compareSearchState = { channel1: null, channel2: null };
-      document.getElementById('compare-results-1').innerHTML = '';
-      document.getElementById('compare-results-2').innerHTML = '';
-    }
-
-    async function fetchCompareSearch(idx) {
-      const inputId = idx === 1 ? 'compare-input-1' : 'compare-input-2';
-      const resultsId = idx === 1 ? 'compare-results-1' : 'compare-results-2';
-      const query = document.getElementById(inputId).value.trim();
-      if (!query) {
-        document.getElementById(resultsId).innerHTML = '<div style="color:var(--danger);padding:8px;">Please enter a channel name</div>';
-        return;
-      }
-      document.getElementById(resultsId).innerHTML = '<div style="padding:8px;">Searching...</div>';
-      try {
-        const response = await fetch(`${SEARCH_API_URL}${encodeURIComponent(query)}`);
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        if (!data.list?.length) {
-          document.getElementById(resultsId).innerHTML = '<div style="color:var(--danger);padding:8px;">Channel not found</div>';
-          return;
-        }
-        
-        document.getElementById(resultsId).innerHTML = '';
-        data.list.forEach(channel => {
-          const [channelName, avatarUrl, channelId] = channel;
-          const el = document.createElement('div');
-          el.className = 'channel-card';
-          el.style.marginBottom = '8px';
-          el.innerHTML = `
-            <img src="${avatarUrl}" alt="${channelName}" class="channel-avatar">
-            <div class="channel-name">${channelName}</div>
-          `;
-          el.onclick = () => {
-            // Create channel info object
-            const channelInfo = {
-              id: channelId,
-              name: channelName,
-              avatar: avatarUrl,
-              count: 0
-            };
-            
-            // Update the appropriate state
-            if (idx === 1) {
-              state.compareChannels[0] = channelInfo;
-              document.getElementById('compare-results-1').innerHTML = `
-                <div style="padding:8px;color:var(--success);">Selected: ${channelName}</div>`;
-            } else {
-              state.compareChannels[1] = channelInfo;
-              document.getElementById('compare-results-2').innerHTML = `
-                <div style="padding:8px;color:var(--success);">Selected: ${channelName}</div>`;
-            }
-            
-            // Check if we have both channels selected
-            if (state.compareChannels[0] && state.compareChannels[1]) {
-              hideCompareSearchBar();
-              showCompare();
-            }
-          };
-          document.getElementById(resultsId).appendChild(el);
-        });
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-        document.getElementById(resultsId).innerHTML = '<div style="color:var(--danger);padding:8px;">Error fetching channel data</div>';
-      }
-    }
-
-    function showCompare() {
-      if (!state.compareChannels || state.compareChannels.length !== 2) {
-        showToast("Need 2 channels to compare");
-        elements.compareSection.style.display = 'none';
-        return;
-      }
-      
-      // Fetch fresh data for both channels
-      fetchCompareData();
-
-      // Start auto-refresh interval
-      if (state.compareIntervalId) {
-        clearInterval(state.compareIntervalId);
-      }
-      state.compareIntervalId = setInterval(fetchCompareData, 2000);
+      // Réinitialiser les odomètres après avoir recréé le HTML
+      state.odometerElements = {
+        count1: new Odometer({
+          el: document.getElementById('compare-count-1'),
+          value: channel1.count,
+          format: '(,ddd)',
+          theme: 'minimal'
+        }),
+        count2: new Odometer({
+          el: document.getElementById('compare-count-2'),
+          value: channel2.count,
+          format: '(,ddd)',
+          theme: 'minimal'
+        })
+      };
     }
 
     async function fetchCompareData() {
@@ -1629,8 +1484,6 @@
           throw new Error("Invalid channel IDs");
         }
 
-        // Show loading state
-        elements.compareChannelsContainer.innerHTML = '<div style="text-align:center;padding:20px;">Loading comparison data...</div>';
         elements.compareSection.style.display = 'block';
 
         const [response1, response2] = await Promise.all([
@@ -1660,6 +1513,10 @@
         console.error("Error fetching comparison data:", error);
         showToast("Error fetching comparison data");
         elements.compareSection.style.display = 'none';
+        if (state.compareIntervalId) {
+          clearInterval(state.compareIntervalId);
+          state.compareIntervalId = null;
+        }
       }
     }
 
