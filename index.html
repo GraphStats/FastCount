@@ -1462,14 +1462,14 @@
         elements.compareChannelsContainer.innerHTML = '<div style="text-align:center;padding:20px;">Loading comparison data...</div>';
         elements.compareSection.style.display = 'block';
 
-        // Log des URLs pour debug
-        console.log('Fetching:', API_BASE_URL + channel1.id);
-        console.log('Fetching:', API_BASE_URL + channel2.id);
+        // Construire les URLs complètes avec l'URL de base
+        const url1 = new URL(channel1.id, API_BASE_URL).toString();
+        const url2 = new URL(channel2.id, API_BASE_URL).toString();
 
-        // Fetch data for both channels avec l'URL complète
+        // Fetch data for both channels avec les URLs correctes
         const [response1, response2] = await Promise.all([
-          fetch(API_BASE_URL + channel1.id),
-          fetch(API_BASE_URL + channel2.id)
+          fetch(url1),
+          fetch(url2)
         ]);
 
         if (!response1.ok || !response2.ok) {
@@ -1589,23 +1589,22 @@
             <div class="channel-name">${channel[0]}</div>
           `;
           el.onclick = () => {
+            const channelInfo = {
+              id: channel[2].toString(), // Assure que l'ID est une chaîne
+              name: channel[0],
+              avatar: channel[3]
+            };
+            
             if (idx === 1) {
-              compareSearchState.channel1 = {
-                id: channel[2],
-                name: channel[0],
-                avatar: channel[3]
-              };
+              compareSearchState.channel1 = channelInfo;
               document.getElementById('compare-results-1').innerHTML = `<div style="padding:8px;color:var(--success);">Selected: ${channel[0]}</div>`;
             } else {
-              compareSearchState.channel2 = {
-                id: channel[2],
-                name: channel[0],
-                avatar: channel[3]
-              };
+              compareSearchState.channel2 = channelInfo;
               document.getElementById('compare-results-2').innerHTML = `<div style="padding:8px;color:var(--success);">Selected: ${channel[0]}</div>`;
             }
-            // Si les deux sont sélectionnés, lance la comparaison
-            if (compareSearchState.channel1 && compareSearchState.channel2) {
+            
+            // Vérification plus stricte avant de lancer la comparaison
+            if (compareSearchState.channel1?.id && compareSearchState.channel2?.id) {
               hideCompareSearchBar();
               state.compareChannels = [compareSearchState.channel1, compareSearchState.channel2];
               showCompare();
