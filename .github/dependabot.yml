@@ -1,12 +1,30 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# Example configuration file that:
+#  - Has a private registry
+#  - Ignores lodash dependency
+#  - Disables version-updates
+#  - Defines a group by package name, for security updates for golang dependencies
 
 version: 2
+registries:
+  example:
+    type: npm-registry
+    url: https://dockycount.up.railway.app/
+    token: ${{secrets.NPM_TOKEN}}
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/src/npm-project"
     schedule:
-      interval: "weekly"
- 
+      interval: "daily"
+    # For Lodash, ignore all updates
+    ignore:
+      - dependency-name: "lodash"
+    # Disable version updates for npm dependencies
+    open-pull-requests-limit: 0
+    registries:
+      - example
+  - package-ecosystem: "gomod"
+    groups:
+      golang:
+        applies-to: security-updates
+        patterns:
+          - "golang.org*"
